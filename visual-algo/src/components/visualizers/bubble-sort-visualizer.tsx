@@ -60,11 +60,11 @@ export default function BubbleSortVisualizer() {
 
   return (
     <div className="w-full">
-      <div className="flex justify-center items-end h-96 border border-gray-200 rounded-lg p-4 bg-gray-50">
+      <div className="flex justify-center items-end h-96 border border-gray-200 rounded-lg p-4 bg-gray-50 gap-px">
         {array.map((value, idx) => (
           <div
             key={idx}
-            className={`w-full mx-px transition-all duration-200 ${getBarColor(idx)}`}
+            className={`flex-grow transition-all duration-200 ${getBarColor(idx)}`}
             style={{ height: `${value}%` }}
           ></div>
         ))}
