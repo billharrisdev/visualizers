@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { useInView } from "react-intersection-observer"
 import { type Visualizer } from "@/lib/data"
 import VisualizerCard from "./visualizer-card"
@@ -15,19 +15,19 @@ export default function VisualizerList({ initialVisualizers }: VisualizerListPro
   const [hasNextPage, setHasNextPage] = useState(true)
   const { ref, inView } = useInView()
 
-  const loadMoreVisualizers = async () => {
+  const loadMoreVisualizers = useCallback(async () => {
     const response = await fetch(`/api/visualizers?page=${page}&limit=8`)
     const data = await response.json()
     setVisualizers((prev) => [...prev, ...data.visualizers])
     setHasNextPage(data.hasNextPage)
     setPage((prev) => prev + 1)
-  }
+  }, [page])
 
   useEffect(() => {
     if (inView && hasNextPage) {
       loadMoreVisualizers()
     }
-  }, [inView, hasNextPage])
+  }, [inView, hasNextPage, loadMoreVisualizers])
 
   return (
     <>

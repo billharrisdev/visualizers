@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -17,11 +17,7 @@ export default function BinarySearchVisualizer() {
   const [foundIndex, setFoundIndex] = useState<number | null>(null);
   const [message, setMessage] = useState("");
 
-  useEffect(() => {
-    generateSortedArray();
-  }, []);
-
-  const generateSortedArray = () => {
+  const generateSortedArray = useCallback(() => {
     if (isSearching) return;
     const newArray = [];
     for (let i = 0; i < ARRAY_SIZE; i++) {
@@ -31,7 +27,11 @@ export default function BinarySearchVisualizer() {
     resetState();
     const randomTarget = newArray[Math.floor(Math.random() * newArray.length)];
     setTarget(randomTarget);
-  };
+  }, [isSearching]);
+
+  useEffect(() => {
+    generateSortedArray();
+  }, [generateSortedArray]);
 
   const resetState = () => {
     setIsSearching(false);

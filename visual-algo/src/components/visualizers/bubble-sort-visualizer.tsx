@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { Button } from "@/components/ui/button"
 
 const ARRAY_SIZE = 50;
@@ -14,11 +14,7 @@ export default function BubbleSortVisualizer() {
   const [comparingIndices, setComparingIndices] = useState<number[]>([]);
   const [sortedIndices, setSortedIndices] = useState<number[]>([]);
 
-  useEffect(() => {
-    generateArray();
-  }, []);
-
-  const generateArray = () => {
+  const generateArray = useCallback(() => {
     if (isSorting) return;
     const newArray = [];
     for (let i = 0; i < ARRAY_SIZE; i++) {
@@ -26,7 +22,11 @@ export default function BubbleSortVisualizer() {
     }
     setArray(newArray);
     setSortedIndices([]);
-  };
+  }, [isSorting]);
+
+  useEffect(() => {
+    generateArray();
+  }, [generateArray]);
 
   const bubbleSort = async () => {
     setIsSorting(true);
