@@ -22,4 +22,5 @@ export const visualizers: Visualizer[] = [
   { id: "14", title: "Heap Sort 2", description: "A comparison-based sorting technique based on Binary Heap data structure.", href: "/sort/heap" },
   { id: "15", title: "Linear Search 2", description: "Sequentially checks each element of the list until a match is found.", href: "/search/linear" },
   { id: "16", title: "Binary Search 2", description: "Finds the position of a target value within a sorted array.", href: "/search/binary" },
+  { id: "17", title: "A* Search", description: "An efficient pathfinding algorithm using heuristics.", href: "/search/a-star" }
 ];
