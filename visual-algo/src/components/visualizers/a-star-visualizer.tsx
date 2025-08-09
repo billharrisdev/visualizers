@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 
 const GRID_SIZE = 20;
@@ -25,11 +25,7 @@ export default function AStarVisualizer() {
   const [closedSet, setClosedSet] = useState<Node[]>([]);
   const [path, setPath] = useState<Node[]>([]);
 
-  useEffect(() => {
-    initializeGrid();
-  }, []);
-
-  const initializeGrid = () => {
+  const initializeGrid = useCallback(() => {
     const newGrid: Node[][] = [];
     for (let row = 0; row < GRID_SIZE; row++) {
       const currentRow: Node[] = [];
@@ -40,7 +36,11 @@ export default function AStarVisualizer() {
     }
     setGrid(newGrid);
     resetState();
-  };
+  }, []);
+
+  useEffect(() => {
+    initializeGrid();
+  }, [initializeGrid]);
 
   const createNode = (row: number, col: number): Node => ({
     row,
@@ -105,8 +105,8 @@ export default function AStarVisualizer() {
     startNode.hScore = heuristic(startNode, endNode);
     startNode.fScore = startNode.gScore + startNode.hScore;
 
-    let openSetLocal = [startNode];
-    let closedSetLocal: Node[] = [];
+    const openSetLocal = [startNode];
+    const closedSetLocal: Node[] = [];
 
     while (openSetLocal.length > 0) {
       let lowestIndex = 0;
@@ -115,14 +115,14 @@ export default function AStarVisualizer() {
           lowestIndex = i;
         }
       }
-      let currentNode = openSetLocal[lowestIndex];
+      const currentNode = openSetLocal[lowestIndex];
 
       setOpenSet([...openSetLocal]);
       setClosedSet([...closedSetLocal]);
       await new Promise((resolve) => setTimeout(resolve, 20));
 
       if (currentNode.row === endNode.row && currentNode.col === endNode.col) {
-        let tempPath = [];
+        const tempPath = [];
         let temp = currentNode;
         while (temp !== null) {
           tempPath.push(temp);
