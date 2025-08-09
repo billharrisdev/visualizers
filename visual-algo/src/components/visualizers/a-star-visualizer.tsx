@@ -186,7 +186,7 @@ export default function AStarVisualizer() {
         {grid.flat().map((node, idx) => (
           <div
             key={idx}
-            className={`w-full aspect-square border border-gray-200 ${getBoxClass(node)}`}
+            className={`aspect-square border border-gray-200 ${getBoxClass(node)}`}
             onMouseDown={() => handleMouseDown(node.row, node.col)}
             onMouseEnter={() => handleMouseEnter(node.row, node.col)}
           ></div>

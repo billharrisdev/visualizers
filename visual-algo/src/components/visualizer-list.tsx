@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react"
 import { useInView } from "react-intersection-observer"
-import { type Visualizer } from "@/lib/data"
+import { visualizers as allVisualizers, type Visualizer } from "@/lib/data"
 import VisualizerCard from "./visualizer-card"
 
 type VisualizerListProps = {
@@ -16,10 +16,11 @@ export default function VisualizerList({ initialVisualizers }: VisualizerListPro
   const { ref, inView } = useInView()
 
   const loadMoreVisualizers = useCallback(async () => {
-    const response = await fetch(`/api/visualizers?page=${page}&limit=8`)
-    const data = await response.json()
-    setVisualizers((prev) => [...prev, ...data.visualizers])
-    setHasNextPage(data.hasNextPage)
+    const start = (page - 1) * 8
+    const end = start + 8
+    const newVisualizers = allVisualizers.slice(start, end)
+    setVisualizers((prev) => [...prev, ...newVisualizers])
+    setHasNextPage(end < allVisualizers.length)
     setPage((prev) => prev + 1)
   }, [page])
 
