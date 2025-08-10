@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
+import { flushSync } from "react-dom"
 import { Button } from "@/components/ui/button"
 
 const ARRAY_SIZE = 50;
@@ -28,25 +29,32 @@ export default function BubbleSortVisualizer() {
     generateArray();
   }, [generateArray]);
 
-  const bubbleSort = async () => {
+  const bubbleSort = useCallback(async () => {
+    if (isSorting) return;
     setIsSorting(true);
     const arr = [...array];
     for (let i = 0; i < arr.length - 1; i++) {
       for (let j = 0; j < arr.length - i - 1; j++) {
-        setComparingIndices([j, j + 1]);
+        flushSync(() => {
+          setComparingIndices([j, j + 1]);
+        });
         await new Promise((resolve) => setTimeout(resolve, ANIMATION_SPEED_MS));
         if (arr[j] > arr[j + 1]) {
           [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
-          setArray([...arr]);
+          flushSync(() => {
+            setArray([...arr]);
+          });
           await new Promise((resolve) => setTimeout(resolve, ANIMATION_SPEED_MS));
         }
       }
-      setSortedIndices((prev) => [...prev, arr.length - 1 - i]);
+      flushSync(() => {
+        setSortedIndices((prev) => [...prev, arr.length - 1 - i]);
+      });
     }
     setSortedIndices((prev) => [...prev, 0]); // The last element is also sorted
     setComparingIndices([]);
     setIsSorting(false);
-  };
+  }, [array, isSorting]);
 
   const getBarColor = (index: number) => {
     if (sortedIndices.includes(index)) {
