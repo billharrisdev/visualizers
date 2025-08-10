@@ -25,3 +25,9 @@ This project uses **Jest** and **React Testing Library** for unit and component 
 ### A Note on Agent Verification
 
 The software agent (Jules) working on this repository may sometimes use other tools for its own internal verification process (e.g., Python with Playwright to generate screenshots of UI changes). These scripts are temporary, live in an untracked `jules-scratch` directory, and are **not** a substitute for the project's Jest tests. The primary testing framework for this repository remains Jest.
+
+## 3. Shell Command Conventions
+
+When writing scripts or commands that need to run inside the `visual-algo` subdirectory, prefer changing directories with a path from the repository root to ensure reliability. This avoids errors caused by an inconsistent shell working directory.
+
+- **Example:** `cd /app/visual-algo && npm install` is more robust than relying on the current working directory.
