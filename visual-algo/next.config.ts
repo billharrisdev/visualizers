@@ -5,7 +5,6 @@ const nextConfig: NextConfig = {
   output: "export",
   distDir: "dist",
   basePath: "/visual-algo",
-  assetPrefix: "/visual-algo/",
 };
 
 export default nextConfig;
