@@ -4,8 +4,8 @@ const nextConfig: NextConfig = {
   /* config options here */
   output: "export",
   distDir: "dist",
-  basePath: "/visualizers",
-  assetPrefix: "/visualizers/",
+  // basePath: "/visualizers",
+  // assetPrefix: "/",
 };
 
 export default nextConfig;

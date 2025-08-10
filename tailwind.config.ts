@@ -1,14 +1,10 @@
-import type { Config } from "tailwindcss"
-import tailwindcssAnimate from "tailwindcss-animate"
+import type { Config } from "tailwindcss";
+import tailwindcssAnimate from "tailwindcss-animate";
 
-const config = {
+const config: Config = {
   darkMode: "class",
-  content: [
-    "./visual-algo/src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./visual-algo/src/components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./visual-algo/src/app/**/*.{js,ts,jsx,tsx,mdx}",
-  ],
-  prefix: "",
+  content: ["./src/**/*.{js,ts,jsx,tsx,mdx}"],
+
   theme: {
     container: {
       center: true,
@@ -73,8 +69,8 @@ const config = {
         "accordion-up": "accordion-up 0.2s ease-out",
       },
     },
+  },
   plugins: [tailwindcssAnimate],
-  plugins: [require("tailwindcss-animate")],
-} satisfies Config
+} satisfies Config;
 
-export default config
+export default config;
