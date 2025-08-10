@@ -4,7 +4,7 @@ const nextConfig: NextConfig = {
   /* config options here */
   output: "export",
   distDir: "dist",
-  basePath: "/visualizers",
+  basePath: "/visual-algo",
 };
 
 export default nextConfig;
