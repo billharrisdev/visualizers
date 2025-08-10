@@ -76,14 +76,18 @@ export default function BubbleSortVisualizer() {
   };
 
   useEffect(() => {
-    if (isSorting && currentStep < animationSteps.length - 1) {
-      const timer = setTimeout(() => {
-        setCurrentStep(currentStep + 1);
-      }, ANIMATION_SPEED_MS);
-      return () => clearTimeout(timer);
-    } else {
+    if (!isSorting) return;
+
+    if (currentStep >= animationSteps.length - 1) {
       setIsSorting(false);
+      return;
     }
+
+    const timer = setTimeout(() => {
+      setCurrentStep(currentStep + 1);
+    }, ANIMATION_SPEED_MS);
+
+    return () => clearTimeout(timer);
   }, [currentStep, isSorting, animationSteps]);
 
   const currentArray = animationSteps[currentStep]?.array || array;
