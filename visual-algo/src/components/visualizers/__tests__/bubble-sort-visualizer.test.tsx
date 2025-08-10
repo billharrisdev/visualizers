@@ -12,10 +12,14 @@ jest.mock('framer-motion', () => {
     ...original,
     AnimatePresence: ({ children }) => <>{children}</>,
     motion: {
-      // Create a mock div that accepts the 'layout' prop without complaining
-      div: React.forwardRef(({ children, layout, ...props }, ref) => (
-        <div {...props} ref={ref}>{children}</div>
-      )),
+      div: (() => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const MockedMotionDiv = React.forwardRef(({ children, _layout, ...props }, ref) => (
+          <div {...props} ref={ref}>{children}</div>
+        ));
+        MockedMotionDiv.displayName = 'MotionDiv';
+        return MockedMotionDiv;
+      })(),
     },
   };
 });
