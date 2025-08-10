@@ -28,7 +28,8 @@ export default function BubbleSortVisualizer() {
     generateArray();
   }, [generateArray]);
 
-  const bubbleSort = async () => {
+  const bubbleSort = useCallback(async () => {
+    if (isSorting) return;
     setIsSorting(true);
     const arr = [...array];
     for (let i = 0; i < arr.length - 1; i++) {
@@ -46,7 +47,7 @@ export default function BubbleSortVisualizer() {
     setSortedIndices((prev) => [...prev, 0]); // The last element is also sorted
     setComparingIndices([]);
     setIsSorting(false);
-  };
+  }, [array, isSorting]);
 
   const getBarColor = (index: number) => {
     if (sortedIndices.includes(index)) {
