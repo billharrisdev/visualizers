@@ -219,24 +219,25 @@ export default function AStarVisualizer() {
           <p>Loading...</p>
         </div>
       ) : (
-        <div
-          data-testid="a-star-grid"
-          className="grid gap-px"
-        style={{
-          display: 'grid',
-          gridTemplateColumns: `repeat(${GRID_SIZE}, 1fr)`,
-          width: 'calc(16px * 50)', // Adjust the size as needed
-        }}
-        onMouseUp={handleMouseUp}
-      >
-        {grid.flat().map((node, idx) => (
+        <div className="w-[min(95vw,80vh)]">
           <div
-            key={idx}
-            className={`w-4 h-4 border border-gray-200 ${getBoxClass(node)}`}
-            onMouseDown={() => handleMouseDown(node.row, node.col)}
-            onMouseEnter={() => handleMouseEnter(node.row, node.col)}
-          ></div>
-        ))}
+            data-testid="a-star-grid"
+            className="grid gap-px"
+            style={{
+              display: 'grid',
+              gridTemplateColumns: `repeat(${GRID_SIZE}, 1fr)`,
+            }}
+            onMouseUp={handleMouseUp}
+          >
+            {grid.flat().map((node, idx) => (
+              <div
+                key={idx}
+                className={`aspect-square w-full border border-gray-200 ${getBoxClass(node)}`}
+                onMouseDown={() => handleMouseDown(node.row, node.col)}
+                onMouseEnter={() => handleMouseEnter(node.row, node.col)}
+              ></div>
+            ))}
+          </div>
         </div>
       )}
       <div className="flex justify-center gap-4 mt-4">
