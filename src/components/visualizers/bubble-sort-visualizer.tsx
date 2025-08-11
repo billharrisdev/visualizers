@@ -3,22 +3,12 @@
 import { useState, useEffect, useCallback } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button"
+import { bubbleSort, Bar, AnimationStep } from "@/lib/algorithms"
 
 const ARRAY_SIZE = 50;
 const MIN_VALUE = 5;
 const MAX_VALUE = 100;
 const ANIMATION_SPEED_MS = 50;
-
-type Bar = {
-  id: number;
-  value: number;
-};
-
-type AnimationStep = {
-  array: Bar[];
-  comparing: number[];
-  sorted: number[];
-}
 
 export default function BubbleSortVisualizer() {
   const [array, setArray] = useState<Bar[]>([]);
@@ -44,38 +34,8 @@ export default function BubbleSortVisualizer() {
     generateArray();
   }, [generateArray]);
 
-  const bubbleSort = () => {
-    const arr = JSON.parse(JSON.stringify(array));
-    const steps: AnimationStep[] = [];
-    const sorted: number[] = [];
-
-    for (let i = 0; i < arr.length - 1; i++) {
-      for (let j = 0; j < arr.length - i - 1; j++) {
-        steps.push({
-          array: JSON.parse(JSON.stringify(arr)),
-          comparing: [arr[j].id, arr[j + 1].id],
-          sorted: [...sorted],
-        });
-
-        if (arr[j].value > arr[j + 1].value) {
-          [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
-          steps.push({
-            array: JSON.parse(JSON.stringify(arr)),
-            comparing: [arr[j].id, arr[j + 1].id],
-            sorted: [...sorted],
-          });
-        }
-      }
-      sorted.push(arr[arr.length - 1 - i].id);
-    }
-    sorted.push(arr[0].id);
-
-    steps.push({
-      array: JSON.parse(JSON.stringify(arr)),
-      comparing: [],
-      sorted: [...sorted],
-    });
-
+  const startSort = () => {
+    const steps = bubbleSort(array);
     setAnimationSteps(steps);
     setIsSorting(true);
   };
@@ -126,7 +86,7 @@ export default function BubbleSortVisualizer() {
         <Button onClick={generateArray} disabled={isSorting}>
           Generate New Array
         </Button>
-        <Button onClick={bubbleSort} disabled={isSorting}>
+        <Button onClick={startSort} disabled={isSorting}>
           Start Bubble Sort
         </Button>
       </div>
