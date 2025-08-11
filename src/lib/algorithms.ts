@@ -57,7 +57,7 @@ export function insertionSort(array: Bar[]): AnimationStep[] {
 
     steps.push({
       array: JSON.parse(JSON.stringify(arr)),
-      comparing: [key.id, arr[j-1].id],
+      comparing: [key.id, arr[j - 1].id],
       sorted: arr.slice(0, i).map((bar: Bar) => bar.id),
     });
 
@@ -69,7 +69,7 @@ export function insertionSort(array: Bar[]): AnimationStep[] {
       newArr[j] = key;
       steps.push({
         array: newArr,
-        comparing: [key.id, arr[j > 0 ? j-1 : 0].id],
+        comparing: [key.id, arr[j > 0 ? j - 1 : 0].id],
         sorted: arr.slice(0, i).map((bar: Bar) => bar.id),
       });
     }
@@ -111,7 +111,7 @@ export function selectionSort(array: Bar[]): AnimationStep[] {
       sorted: [...sorted],
     });
   }
-  sorted.push(arr[arr.length-1].id)
+  sorted.push(arr[arr.length - 1].id);
 
   steps.push({
     array: JSON.parse(JSON.stringify(arr)),
@@ -128,42 +128,57 @@ export function mergeSort(array: Bar[]): AnimationStep[] {
   const steps: AnimationStep[] = [];
 
   function merge(l: number, m: number, r: number) {
-    const n1 = m - l + 1;
-    const n2 = r - m;
-    const L = new Array(n1);
-    const R = new Array(n2);
-    for (let i = 0; i < n1; i++) L[i] = arr[l + i];
-    for (let j = 0; j < n2; j++) R[j] = arr[m + 1 + j];
-    let i = 0, j = 0, k = l;
-    while (i < n1 && j < n2) {
-      steps.push({
-        array: JSON.parse(JSON.stringify(arr)),
-        comparing: [L[i].id, R[j].id],
-        sorted: [],
-      });
-      if (L[i].value <= R[j].value) {
-        arr[k] = L[i];
-        i++;
-      } else {
-        arr[k] = R[j];
-        j++;
+    const L: Bar[] = arr.slice(l, m + 1);
+    const R: Bar[] = arr.slice(m + 1, r + 1);
+    let i = 0;
+    let j = 0;
+    const merged: Bar[] = [];
+
+    const pushDisplayStep = (comparing: number[] = []) => {
+      // Build a display snapshot that replaces the window [l..r]
+      // with the partially merged sequence followed by the remaining
+      // elements from L and R, ensuring each id appears exactly once.
+      const display = arr.slice();
+      const windowSlice = [...merged, ...L.slice(i), ...R.slice(j)];
+      for (let t = 0; t < windowSlice.length; t++) {
+        display[l + t] = windowSlice[t];
       }
       steps.push({
-        array: JSON.parse(JSON.stringify(arr)),
-        comparing: [],
+        array: JSON.parse(JSON.stringify(display)),
+        comparing,
         sorted: [],
       });
-      k++;
+    };
+
+    while (i < L.length && j < R.length) {
+      // Show comparison before choosing
+      pushDisplayStep([L[i].id, R[j].id]);
+      if (L[i].value <= R[j].value) {
+        merged.push(L[i]);
+        i++;
+      } else {
+        merged.push(R[j]);
+        j++;
+      }
+      // Show state after placing one element
+      pushDisplayStep([]);
     }
-    while (i < n1) {
-      arr[k] = L[i];
+
+    // Drain remaining elements
+    while (i < L.length) {
+      merged.push(L[i]);
       i++;
-      k++;
+      pushDisplayStep([]);
     }
-    while (j < n2) {
-      arr[k] = R[j];
+    while (j < R.length) {
+      merged.push(R[j]);
       j++;
-      k++;
+      pushDisplayStep([]);
+    }
+
+    // Commit the merged window back into the working array
+    for (let t = 0; t < merged.length; t++) {
+      arr[l + t] = merged[t];
     }
   }
 
@@ -178,128 +193,125 @@ export function mergeSort(array: Bar[]): AnimationStep[] {
   sort(0, arr.length - 1);
 
   steps.push({
-      array: JSON.parse(JSON.stringify(arr)),
-      comparing: [],
-      sorted: arr.map((bar: Bar) => bar.id)
+    array: JSON.parse(JSON.stringify(arr)),
+    comparing: [],
+    sorted: arr.map((bar: Bar) => bar.id),
   });
 
   return steps;
 }
 
 export function quickSort(array: Bar[]): AnimationStep[] {
-    if (array.length === 0) return [];
-    const arr = JSON.parse(JSON.stringify(array));
-    const steps: AnimationStep[] = [];
+  if (array.length === 0) return [];
+  const arr = JSON.parse(JSON.stringify(array));
+  const steps: AnimationStep[] = [];
 
-    function partition(low: number, high: number) {
-        const pivot = arr[high];
-        let i = low - 1;
-        steps.push({
-            array: JSON.parse(JSON.stringify(arr)),
-            comparing: [],
-            sorted: [],
-            pivot: pivot.id
-        });
-
-        for (let j = low; j < high; j++) {
-            steps.push({
-                array: JSON.parse(JSON.stringify(arr)),
-                comparing: [arr[j].id, pivot.id],
-                sorted: [],
-                pivot: pivot.id
-            });
-            if (arr[j].value < pivot.value) {
-                i++;
-                [arr[i], arr[j]] = [arr[j], arr[i]];
-                steps.push({
-                    array: JSON.parse(JSON.stringify(arr)),
-                    comparing: [arr[i].id, arr[j].id],
-                    sorted: [],
-                    pivot: pivot.id
-                });
-            }
-        }
-        [arr[i + 1], arr[high]] = [arr[high], arr[i + 1]];
-        steps.push({
-            array: JSON.parse(JSON.stringify(arr)),
-            comparing: [],
-            sorted: [],
-            pivot: pivot.id
-        });
-        return i + 1;
-    }
-
-    function sort(low: number, high: number) {
-        if (low < high) {
-            const pi = partition(low, high);
-            sort(low, pi - 1);
-            sort(pi + 1, high);
-        }
-    }
-
-    sort(0, arr.length - 1);
-
+  function partition(low: number, high: number) {
+    const pivot = arr[high];
+    let i = low - 1;
     steps.push({
-        array: JSON.parse(JSON.stringify(arr)),
-        comparing: [],
-        sorted: arr.map((bar: Bar) => bar.id)
+      array: JSON.parse(JSON.stringify(arr)),
+      comparing: [],
+      sorted: [],
+      pivot: pivot.id,
     });
 
-    return steps;
+    for (let j = low; j < high; j++) {
+      steps.push({
+        array: JSON.parse(JSON.stringify(arr)),
+        comparing: [arr[j].id, pivot.id],
+        sorted: [],
+        pivot: pivot.id,
+      });
+      if (arr[j].value < pivot.value) {
+        i++;
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+        steps.push({
+          array: JSON.parse(JSON.stringify(arr)),
+          comparing: [arr[i].id, arr[j].id],
+          sorted: [],
+          pivot: pivot.id,
+        });
+      }
+    }
+    [arr[i + 1], arr[high]] = [arr[high], arr[i + 1]];
+    steps.push({
+      array: JSON.parse(JSON.stringify(arr)),
+      comparing: [],
+      sorted: [],
+      pivot: pivot.id,
+    });
+    return i + 1;
+  }
+
+  function sort(low: number, high: number) {
+    if (low < high) {
+      const pi = partition(low, high);
+      sort(low, pi - 1);
+      sort(pi + 1, high);
+    }
+  }
+
+  sort(0, arr.length - 1);
+
+  steps.push({
+    array: JSON.parse(JSON.stringify(arr)),
+    comparing: [],
+    sorted: arr.map((bar: Bar) => bar.id),
+  });
+
+  return steps;
 }
 
 export function heapSort(array: Bar[]): AnimationStep[] {
-    if (array.length === 0) return [];
-    const arr = JSON.parse(JSON.stringify(array));
-    const steps: AnimationStep[] = [];
-    const n = arr.length;
+  if (array.length === 0) return [];
+  const arr = JSON.parse(JSON.stringify(array));
+  const steps: AnimationStep[] = [];
+  const n = arr.length;
 
-    function heapify(N: number, i: number) {
-      let largest = i;
-      const l = 2 * i + 1;
-      const r = 2 * i + 2;
-
-      steps.push({
-          array: JSON.parse(JSON.stringify(arr)),
-          comparing: [arr[i].id, arr[largest].id],
-          sorted: arr.slice(n).map((bar: Bar) => bar.id)
-      });
-
-      if (l < N && arr[l].value > arr[largest].value)
-        largest = l;
-
-      if (r < N && arr[r].value > arr[largest].value)
-        largest = r;
-
-      if (largest !== i) {
-        [arr[i], arr[largest]] = [arr[largest], arr[i]];
-        steps.push({
-            array: JSON.parse(JSON.stringify(arr)),
-            comparing: [arr[i].id, arr[largest].id],
-            sorted: arr.slice(n).map((bar: Bar) => bar.id)
-        });
-        heapify(N, largest);
-      }
-    }
-
-    for (let i = Math.floor(n / 2) - 1; i >= 0; i--)
-      heapify(n, i);
-
-    for (let i = n - 1; i > 0; i--) {
-      [arr[0], arr[i]] = [arr[i], arr[0]];
-       steps.push({
-          array: JSON.parse(JSON.stringify(arr)),
-          comparing: [arr[0].id, arr[i].id],
-          sorted: arr.slice(i).map((bar: Bar) => bar.id)
-      });
-      heapify(i, 0);
-    }
+  function heapify(N: number, i: number) {
+    let largest = i;
+    const l = 2 * i + 1;
+    const r = 2 * i + 2;
 
     steps.push({
-        array: JSON.parse(JSON.stringify(arr)),
-        comparing: [],
-        sorted: arr.map((bar: Bar) => bar.id)
+      array: JSON.parse(JSON.stringify(arr)),
+      comparing: [arr[i].id, arr[largest].id],
+      sorted: arr.slice(n).map((bar: Bar) => bar.id),
     });
 
-    return steps;
+    if (l < N && arr[l].value > arr[largest].value) largest = l;
+
+    if (r < N && arr[r].value > arr[largest].value) largest = r;
+
+    if (largest !== i) {
+      [arr[i], arr[largest]] = [arr[largest], arr[i]];
+      steps.push({
+        array: JSON.parse(JSON.stringify(arr)),
+        comparing: [arr[i].id, arr[largest].id],
+        sorted: arr.slice(n).map((bar: Bar) => bar.id),
+      });
+      heapify(N, largest);
+    }
+  }
+
+  for (let i = Math.floor(n / 2) - 1; i >= 0; i--) heapify(n, i);
+
+  for (let i = n - 1; i > 0; i--) {
+    [arr[0], arr[i]] = [arr[i], arr[0]];
+    steps.push({
+      array: JSON.parse(JSON.stringify(arr)),
+      comparing: [arr[0].id, arr[i].id],
+      sorted: arr.slice(i).map((bar: Bar) => bar.id),
+    });
+    heapify(i, 0);
+  }
+
+  steps.push({
+    array: JSON.parse(JSON.stringify(arr)),
+    comparing: [],
+    sorted: arr.map((bar: Bar) => bar.id),
+  });
+
+  return steps;
 }
