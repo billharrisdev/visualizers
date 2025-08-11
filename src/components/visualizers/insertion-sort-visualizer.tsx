@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import { useState, useEffect, useCallback } from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import { Button } from "@/components/ui/button"
-import { insertionSort, Bar, AnimationStep } from "@/lib/algorithms"
+import { useState, useEffect, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { insertionSort, Bar, AnimationStep } from "@/lib/algorithms";
 
 const ARRAY_SIZE = 50;
 const MIN_VALUE = 5;
@@ -22,7 +22,8 @@ export default function InsertionSortVisualizer() {
     for (let i = 0; i < ARRAY_SIZE; i++) {
       newArray.push({
         id: i,
-        value: Math.floor(Math.random() * (MAX_VALUE - MIN_VALUE + 1)) + MIN_VALUE,
+        value:
+          Math.floor(Math.random() * (MAX_VALUE - MIN_VALUE + 1)) + MIN_VALUE,
       });
     }
     setArray(newArray);
@@ -47,7 +48,11 @@ export default function InsertionSortVisualizer() {
 
   useEffect(() => {
     if (!isSorting) return;
-    if (currentStep >= animationSteps.length) {
+    // Stop on the last frame so the completed state remains visible
+    if (
+      animationSteps.length === 0 ||
+      currentStep >= animationSteps.length - 1
+    ) {
       setIsSorting(false);
       setIsFinished(true);
       return;
@@ -62,11 +67,10 @@ export default function InsertionSortVisualizer() {
   const currentArray = currentFrame?.array || array;
   const comparingIds = currentFrame?.comparing || [];
   const sortedIds = (currentFrame?.sorted || []).concat(
-    (currentStep === animationSteps.length - 1 && animationSteps.length > 0)
-      ? currentArray.map(bar => bar.id)
+    currentStep === animationSteps.length - 1 && animationSteps.length > 0
+      ? currentArray.map((bar) => bar.id)
       : []
   );
-
 
   const getBarColor = (id: number) => {
     if (sortedIds.includes(id)) return "#22c55e"; // green-500

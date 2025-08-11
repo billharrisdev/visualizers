@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import { useState, useEffect, useCallback } from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import { Button } from "@/components/ui/button"
-import { quickSort, Bar, AnimationStep } from "@/lib/algorithms"
+import { useState, useEffect, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { quickSort, Bar, AnimationStep } from "@/lib/algorithms";
 
 const ARRAY_SIZE = 50;
 const MIN_VALUE = 5;
@@ -22,7 +22,8 @@ export default function QuickSortVisualizer() {
     for (let i = 0; i < ARRAY_SIZE; i++) {
       newArray.push({
         id: i,
-        value: Math.floor(Math.random() * (MAX_VALUE - MIN_VALUE + 1)) + MIN_VALUE,
+        value:
+          Math.floor(Math.random() * (MAX_VALUE - MIN_VALUE + 1)) + MIN_VALUE,
       });
     }
     setArray(newArray);
@@ -47,7 +48,11 @@ export default function QuickSortVisualizer() {
 
   useEffect(() => {
     if (!isSorting) return;
-    if (currentStep >= animationSteps.length) {
+    // Stop on the last frame so the completed state remains visible
+    if (
+      animationSteps.length === 0 ||
+      currentStep >= animationSteps.length - 1
+    ) {
       setIsSorting(false);
       setIsFinished(true);
       return;
