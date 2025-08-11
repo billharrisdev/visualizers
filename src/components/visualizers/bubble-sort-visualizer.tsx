@@ -15,9 +15,9 @@ export default function BubbleSortVisualizer() {
   const [animationSteps, setAnimationSteps] = useState<AnimationStep[]>([]);
   const [currentStep, setCurrentStep] = useState(0);
   const [isSorting, setIsSorting] = useState(false);
+  const [isFinished, setIsFinished] = useState(false);
 
   const generateArray = useCallback(() => {
-    if (isSorting) return;
     const newArray: Bar[] = [];
     for (let i = 0; i < ARRAY_SIZE; i++) {
       newArray.push({
@@ -28,22 +28,28 @@ export default function BubbleSortVisualizer() {
     setArray(newArray);
     setAnimationSteps([]);
     setCurrentStep(0);
-  }, [isSorting]);
+    setIsSorting(false);
+    setIsFinished(false);
+  }, []);
 
   useEffect(() => {
-    generateArray();
-  }, [generateArray]);
+    if (!isFinished) {
+      generateArray();
+    }
+  }, [generateArray, isFinished]);
 
   const startSort = () => {
     const steps = bubbleSort(array);
     setAnimationSteps(steps);
     setIsSorting(true);
+    setIsFinished(false);
   };
 
   useEffect(() => {
     if (!isSorting) return;
-    if (currentStep >= animationSteps.length - 1) {
+    if (currentStep >= animationSteps.length) {
       setIsSorting(false);
+      setIsFinished(true);
       return;
     }
     const timer = setTimeout(() => {
