@@ -14,7 +14,7 @@
 
 ## Deployment:
 
-[Visualizers] (https://billharrisdev.github.io/visualizers) 
+[Visualizers](https://billharrisdev.github.io/visualizers) 
 
 ## Evaluations
 
