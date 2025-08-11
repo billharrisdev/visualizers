@@ -1,18 +1,23 @@
 ## FAQ
+
 **Q:** What is this site?
+
 **A:** A playground for trying out new / recent AI coding agents and tools while building small sample sites.
 
-
 **Q:** What AI tools were used?
+
 **A:** Site initially created with Jules (Google). When that approach came up short, switched to Copilot in Agent Mode w/GPT 5 model (Github / MS in VS Code)  
 
 **Q:** What other some other AI Agent coding tools are out there to try?
+
 **A:** There are tons with new ones being released every month.  Here are a few: Claude Agent, Windsurf, Cursor, Cline, CrewAI. 
 
 ## Deployment:
+
 [Visualizers] (https://billharrisdev.github.io/visualizers) 
 
 ## Evaluations
+
 **Jules** - Capabilities are a bit underwhelming for vibe coding a Nextjs / Tailwind site with ShadCN components.  
 It might be better given less restrictions, but after about a dozen interactions it was unable to figure out tailwind v4 initialization. 
 Other issues -  No live preview functionality.  It tried writing some python with Playright to verify correctness of new work. It would attempt to browse / find elements,
