@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
   output: "export",
   distDir: "dist",
   basePath: "/visualizers",
-  // assetPrefix: "/",
+  assetPrefix: "/visualizers",
 };
 
 export default nextConfig;
