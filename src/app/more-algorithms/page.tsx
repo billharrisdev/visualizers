@@ -16,7 +16,6 @@ export default function MoreAlgorithmsPage() {
   ];
 
   const graphAlgos = [
-    "Dijkstra's Algorithm",
     "A* Search",
     "Bellman-Ford Algorithm",
     "Floyd-Warshall Algorithm",
