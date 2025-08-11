@@ -15,6 +15,7 @@ export default function QuickSortVisualizer() {
   const [animationSteps, setAnimationSteps] = useState<AnimationStep[]>([]);
   const [currentStep, setCurrentStep] = useState(0);
   const [isSorting, setIsSorting] = useState(false);
+  const [isFinished, setIsFinished] = useState(false);
 
   const generateArray = useCallback(() => {
     const newArray: Bar[] = [];
@@ -27,22 +28,28 @@ export default function QuickSortVisualizer() {
     setArray(newArray);
     setAnimationSteps([]);
     setCurrentStep(0);
+    setIsSorting(false);
+    setIsFinished(false);
   }, []);
 
   useEffect(() => {
-    generateArray();
-  }, []);
+    if (!isFinished) {
+      generateArray();
+    }
+  }, [generateArray, isFinished]);
 
   const startSort = () => {
     const steps = quickSort(array);
     setAnimationSteps(steps);
     setIsSorting(true);
+    setIsFinished(false);
   };
 
   useEffect(() => {
     if (!isSorting) return;
-    if (currentStep >= animationSteps.length - 1) {
+    if (currentStep >= animationSteps.length) {
       setIsSorting(false);
+      setIsFinished(true);
       return;
     }
     const timer = setTimeout(() => {
