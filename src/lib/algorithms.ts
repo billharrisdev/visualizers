@@ -53,7 +53,7 @@ export function insertionSort(array: Bar[]): AnimationStep[] {
 
   for (let i = 1; i < arr.length; i++) {
     let j = i;
-    let key = arr[i];
+    const key = arr[i];
 
     steps.push({
       array: JSON.parse(JSON.stringify(arr)),
@@ -128,10 +128,10 @@ export function mergeSort(array: Bar[]): AnimationStep[] {
   const steps: AnimationStep[] = [];
 
   function merge(l: number, m: number, r: number) {
-    let n1 = m - l + 1;
-    let n2 = r - m;
-    let L = new Array(n1);
-    let R = new Array(n2);
+    const n1 = m - l + 1;
+    const n2 = r - m;
+    const L = new Array(n1);
+    const R = new Array(n2);
     for (let i = 0; i < n1; i++) L[i] = arr[l + i];
     for (let j = 0; j < n2; j++) R[j] = arr[m + 1 + j];
     let i = 0, j = 0, k = l;
@@ -169,7 +169,7 @@ export function mergeSort(array: Bar[]): AnimationStep[] {
 
   function sort(l: number, r: number) {
     if (l >= r) return;
-    let m = l + Math.floor((r - l) / 2);
+    const m = l + Math.floor((r - l) / 2);
     sort(l, m);
     sort(m + 1, r);
     merge(l, m, r);
@@ -192,7 +192,7 @@ export function quickSort(array: Bar[]): AnimationStep[] {
     const steps: AnimationStep[] = [];
 
     function partition(low: number, high: number) {
-        let pivot = arr[high];
+        const pivot = arr[high];
         let i = low - 1;
         steps.push({
             array: JSON.parse(JSON.stringify(arr)),
@@ -231,7 +231,7 @@ export function quickSort(array: Bar[]): AnimationStep[] {
 
     function sort(low: number, high: number) {
         if (low < high) {
-            let pi = partition(low, high);
+            const pi = partition(low, high);
             sort(low, pi - 1);
             sort(pi + 1, high);
         }
@@ -252,12 +252,12 @@ export function heapSort(array: Bar[]): AnimationStep[] {
     if (array.length === 0) return [];
     const arr = JSON.parse(JSON.stringify(array));
     const steps: AnimationStep[] = [];
-    let n = arr.length;
+    const n = arr.length;
 
     function heapify(N: number, i: number) {
       let largest = i;
-      let l = 2 * i + 1;
-      let r = 2 * i + 2;
+      const l = 2 * i + 1;
+      const r = 2 * i + 2;
 
       steps.push({
           array: JSON.parse(JSON.stringify(arr)),
