@@ -3,9 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 
-const GRID_SIZE = 20;
-const START_NODE = { row: 5, col: 5 };
-const END_NODE = { row: 15, col: 15 };
+const GRID_SIZE = 50;
 
 type Node = {
   row: number;
@@ -21,16 +19,48 @@ export default function AStarVisualizer() {
   const [grid, setGrid] = useState<Node[][]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [isMousePressed, setIsMousePressed] = useState(false);
+  const [startNode, setStartNode] = useState({ row: 5, col: 5 });
+  const [endNode, setEndNode] = useState({ row: 15, col: 15 });
   const [openSet, setOpenSet] = useState<Node[]>([]);
   const [closedSet, setClosedSet] = useState<Node[]>([]);
   const [path, setPath] = useState<Node[]>([]);
 
   const initializeGrid = useCallback(() => {
     const newGrid: Node[][] = [];
+    const newStartNode = {
+      row: Math.floor(Math.random() * GRID_SIZE),
+      col: Math.floor(Math.random() * GRID_SIZE),
+    };
+    let newEndNode = {
+      row: Math.floor(Math.random() * GRID_SIZE),
+      col: Math.floor(Math.random() * GRID_SIZE),
+    };
+
+    while (newEndNode.row === newStartNode.row && newEndNode.col === newStartNode.col) {
+      newEndNode = {
+        row: Math.floor(Math.random() * GRID_SIZE),
+        col: Math.floor(Math.random() * GRID_SIZE),
+      };
+    }
+
+    setStartNode(newStartNode);
+    setEndNode(newEndNode);
+
     for (let row = 0; row < GRID_SIZE; row++) {
       const currentRow: Node[] = [];
       for (let col = 0; col < GRID_SIZE; col++) {
-        currentRow.push(createNode(row, col));
+        const isObstacle = Math.random() < 0.2;
+        // Ensure start and end nodes are not obstacles
+        if (
+          (row === newStartNode.row && col === newStartNode.col) ||
+          (row === newEndNode.row && col === newEndNode.col)
+        ) {
+          currentRow.push(createNode(row, col));
+        } else {
+          const node = createNode(row, col);
+          node.isObstacle = isObstacle;
+          currentRow.push(node);
+        }
       }
       newGrid.push(currentRow);
     }
@@ -98,14 +128,14 @@ export default function AStarVisualizer() {
     setClosedSet([]);
     setPath([]);
 
-    const startNode = grid[START_NODE.row][START_NODE.col];
-    const endNode = grid[END_NODE.row][END_NODE.col];
+    const start = grid[startNode.row][startNode.col];
+    const end = grid[endNode.row][endNode.col];
 
-    startNode.gScore = 0;
-    startNode.hScore = heuristic(startNode, endNode);
-    startNode.fScore = startNode.gScore + startNode.hScore;
+    start.gScore = 0;
+    start.hScore = heuristic(start, end);
+    start.fScore = start.gScore + start.hScore;
 
-    const openSetLocal = [startNode];
+    const openSetLocal = [start];
     const closedSetLocal: Node[] = [];
 
     while (openSetLocal.length > 0) {
@@ -121,7 +151,7 @@ export default function AStarVisualizer() {
       setClosedSet([...closedSetLocal]);
       await new Promise((resolve) => setTimeout(resolve, 20));
 
-      if (currentNode.row === endNode.row && currentNode.col === endNode.col) {
+      if (currentNode.row === end.row && currentNode.col === end.col) {
         const tempPath = [];
         let temp = currentNode;
         while (temp !== null) {
@@ -147,7 +177,7 @@ export default function AStarVisualizer() {
         if (tentativeGScore < neighbor.gScore) {
           neighbor.parent = currentNode;
           neighbor.gScore = tentativeGScore;
-          neighbor.hScore = heuristic(neighbor, endNode);
+          neighbor.hScore = heuristic(neighbor, end);
           neighbor.fScore = neighbor.gScore + neighbor.hScore;
 
           if (!openSetLocal.some(node => node.row === neighbor.row && node.col === neighbor.col)) {
@@ -171,8 +201,8 @@ export default function AStarVisualizer() {
   };
 
   const getBoxClass = (node: Node) => {
-    if (node.row === START_NODE.row && node.col === START_NODE.col) return "bg-green-500";
-    if (node.row === END_NODE.row && node.col === END_NODE.col) return "bg-red-500";
+    if (node.row === startNode.row && node.col === startNode.col) return "bg-green-500";
+    if (node.row === endNode.row && node.col === endNode.col) return "bg-red-500";
     if (path.includes(node)) return "bg-yellow-400";
     if (closedSet.some(n => n.row === node.row && n.col === node.col)) return "bg-blue-300";
     if (openSet.some(n => n.row === node.row && n.col === node.col)) return "bg-blue-200";
@@ -181,12 +211,20 @@ export default function AStarVisualizer() {
   };
 
   return (
-    <div className="w-full" onMouseUp={handleMouseUp}>
-      <div className="grid gap-px" style={{ display: 'grid', gridTemplateColumns: `repeat(${GRID_SIZE}, 1fr)` }}>
+    <div className="flex flex-col items-center">
+      <div
+        className="grid gap-px"
+        style={{
+          display: 'grid',
+          gridTemplateColumns: `repeat(${GRID_SIZE}, 1fr)`,
+          width: 'calc(20px * 50)', // Adjust the size as needed
+        }}
+        onMouseUp={handleMouseUp}
+      >
         {grid.flat().map((node, idx) => (
           <div
             key={idx}
-            className={`aspect-square border border-gray-200 ${getBoxClass(node)}`}
+            className={`w-5 h-5 border border-gray-200 ${getBoxClass(node)}`}
             onMouseDown={() => handleMouseDown(node.row, node.col)}
             onMouseEnter={() => handleMouseEnter(node.row, node.col)}
           ></div>
