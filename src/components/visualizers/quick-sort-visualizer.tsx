@@ -3,23 +3,12 @@
 import { useState, useEffect, useCallback } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button"
+import { quickSort, Bar, AnimationStep } from "@/lib/algorithms"
 
 const ARRAY_SIZE = 50;
 const MIN_VALUE = 5;
 const MAX_VALUE = 100;
 const ANIMATION_SPEED_MS = 50;
-
-type Bar = {
-  id: number;
-  value: number;
-};
-
-type AnimationStep = {
-  array: Bar[];
-  comparing: number[];
-  sorted: number[];
-  pivot?: number;
-}
 
 export default function QuickSortVisualizer() {
   const [array, setArray] = useState<Bar[]>([]);
@@ -45,64 +34,8 @@ export default function QuickSortVisualizer() {
     generateArray();
   }, [generateArray]);
 
-  const quickSort = () => {
-    const arr = JSON.parse(JSON.stringify(array));
-    const steps: AnimationStep[] = [];
-
-    function partition(low: number, high: number) {
-        let pivot = arr[high];
-        let i = low - 1;
-        steps.push({
-            array: JSON.parse(JSON.stringify(arr)),
-            comparing: [],
-            sorted: [],
-            pivot: pivot.id
-        });
-
-        for (let j = low; j < high; j++) {
-            steps.push({
-                array: JSON.parse(JSON.stringify(arr)),
-                comparing: [arr[j].id, pivot.id],
-                sorted: [],
-                pivot: pivot.id
-            });
-            if (arr[j].value < pivot.value) {
-                i++;
-                [arr[i], arr[j]] = [arr[j], arr[i]];
-                steps.push({
-                    array: JSON.parse(JSON.stringify(arr)),
-                    comparing: [arr[i].id, arr[j].id],
-                    sorted: [],
-                    pivot: pivot.id
-                });
-            }
-        }
-        [arr[i + 1], arr[high]] = [arr[high], arr[i + 1]];
-        steps.push({
-            array: JSON.parse(JSON.stringify(arr)),
-            comparing: [],
-            sorted: [],
-            pivot: pivot.id
-        });
-        return i + 1;
-    }
-
-    function sort(low: number, high: number) {
-        if (low < high) {
-            let pi = partition(low, high);
-            sort(low, pi - 1);
-            sort(pi + 1, high);
-        }
-    }
-
-    sort(0, arr.length - 1);
-
-    steps.push({
-        array: JSON.parse(JSON.stringify(arr)),
-        comparing: [],
-        sorted: arr.map(bar => bar.id)
-    });
-
+  const startSort = () => {
+    const steps = quickSort(array);
     setAnimationSteps(steps);
     setIsSorting(true);
   };
@@ -155,7 +88,7 @@ export default function QuickSortVisualizer() {
         <Button onClick={generateArray} disabled={isSorting}>
           Generate New Array
         </Button>
-        <Button onClick={quickSort} disabled={isSorting}>
+        <Button onClick={startSort} disabled={isSorting}>
           Start Quick Sort
         </Button>
       </div>

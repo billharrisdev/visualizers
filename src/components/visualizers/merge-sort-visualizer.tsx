@@ -3,22 +3,12 @@
 import { useState, useEffect, useCallback } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button"
+import { mergeSort, Bar, AnimationStep } from "@/lib/algorithms"
 
 const ARRAY_SIZE = 50;
 const MIN_VALUE = 5;
 const MAX_VALUE = 100;
 const ANIMATION_SPEED_MS = 50;
-
-type Bar = {
-  id: number;
-  value: number;
-};
-
-type AnimationStep = {
-  array: Bar[];
-  comparing: number[];
-  sorted: number[];
-}
 
 export default function MergeSortVisualizer() {
   const [array, setArray] = useState<Bar[]>([]);
@@ -44,66 +34,8 @@ export default function MergeSortVisualizer() {
     generateArray();
   }, [generateArray]);
 
-  const mergeSort = () => {
-    const arr = JSON.parse(JSON.stringify(array));
-    const steps: AnimationStep[] = [];
-
-    function merge(l: number, m: number, r: number) {
-      let n1 = m - l + 1;
-      let n2 = r - m;
-      let L = new Array(n1);
-      let R = new Array(n2);
-      for (let i = 0; i < n1; i++) L[i] = arr[l + i];
-      for (let j = 0; j < n2; j++) R[j] = arr[m + 1 + j];
-      let i = 0, j = 0, k = l;
-      while (i < n1 && j < n2) {
-        steps.push({
-          array: JSON.parse(JSON.stringify(arr)),
-          comparing: [L[i].id, R[j].id],
-          sorted: [],
-        });
-        if (L[i].value <= R[j].value) {
-          arr[k] = L[i];
-          i++;
-        } else {
-          arr[k] = R[j];
-          j++;
-        }
-        steps.push({
-          array: JSON.parse(JSON.stringify(arr)),
-          comparing: [],
-          sorted: [],
-        });
-        k++;
-      }
-      while (i < n1) {
-        arr[k] = L[i];
-        i++;
-        k++;
-      }
-      while (j < n2) {
-        arr[k] = R[j];
-        j++;
-        k++;
-      }
-    }
-
-    function sort(l: number, r: number) {
-      if (l >= r) return;
-      let m = l + Math.floor((r - l) / 2);
-      sort(l, m);
-      sort(m + 1, r);
-      merge(l, m, r);
-    }
-
-    sort(0, arr.length - 1);
-
-    steps.push({
-        array: JSON.parse(JSON.stringify(arr)),
-        comparing: [],
-        sorted: arr.map(bar => bar.id)
-    });
-
+  const startSort = () => {
+    const steps = mergeSort(array);
     setAnimationSteps(steps);
     setIsSorting(true);
   };
@@ -154,7 +86,7 @@ export default function MergeSortVisualizer() {
         <Button onClick={generateArray} disabled={isSorting}>
           Generate New Array
         </Button>
-        <Button onClick={mergeSort} disabled={isSorting}>
+        <Button onClick={startSort} disabled={isSorting}>
           Start Merge Sort
         </Button>
       </div>

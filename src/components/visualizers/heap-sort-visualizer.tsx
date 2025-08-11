@@ -3,22 +3,12 @@
 import { useState, useEffect, useCallback } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button"
+import { heapSort, Bar, AnimationStep } from "@/lib/algorithms"
 
 const ARRAY_SIZE = 50;
 const MIN_VALUE = 5;
 const MAX_VALUE = 100;
 const ANIMATION_SPEED_MS = 50;
-
-type Bar = {
-  id: number;
-  value: number;
-};
-
-type AnimationStep = {
-  array: Bar[];
-  comparing: number[];
-  sorted: number[];
-}
 
 export default function HeapSortVisualizer() {
   const [array, setArray] = useState<Bar[]>([]);
@@ -44,58 +34,8 @@ export default function HeapSortVisualizer() {
     generateArray();
   }, [generateArray]);
 
-  const heapSort = () => {
-    const arr = JSON.parse(JSON.stringify(array));
-    const steps: AnimationStep[] = [];
-    let n = arr.length;
-
-    function heapify(N: number, i: number) {
-      let largest = i;
-      let l = 2 * i + 1;
-      let r = 2 * i + 2;
-
-      steps.push({
-          array: JSON.parse(JSON.stringify(arr)),
-          comparing: [arr[i].id, arr[largest].id],
-          sorted: arr.slice(n).map((bar: Bar) => bar.id)
-      });
-
-      if (l < N && arr[l].value > arr[largest].value)
-        largest = l;
-
-      if (r < N && arr[r].value > arr[largest].value)
-        largest = r;
-
-      if (largest !== i) {
-        [arr[i], arr[largest]] = [arr[largest], arr[i]];
-        steps.push({
-            array: JSON.parse(JSON.stringify(arr)),
-            comparing: [arr[i].id, arr[largest].id],
-            sorted: arr.slice(n).map((bar: Bar) => bar.id)
-        });
-        heapify(N, largest);
-      }
-    }
-
-    for (let i = Math.floor(n / 2) - 1; i >= 0; i--)
-      heapify(n, i);
-
-    for (let i = n - 1; i > 0; i--) {
-      [arr[0], arr[i]] = [arr[i], arr[0]];
-       steps.push({
-          array: JSON.parse(JSON.stringify(arr)),
-          comparing: [arr[0].id, arr[i].id],
-          sorted: arr.slice(i).map((bar: Bar) => bar.id)
-      });
-      heapify(i, 0);
-    }
-
-    steps.push({
-        array: JSON.parse(JSON.stringify(arr)),
-        comparing: [],
-        sorted: arr.map(bar => bar.id)
-    });
-
+  const startSort = () => {
+    const steps = heapSort(array);
     setAnimationSteps(steps);
     setIsSorting(true);
   };
@@ -146,7 +86,7 @@ export default function HeapSortVisualizer() {
         <Button onClick={generateArray} disabled={isSorting}>
           Generate New Array
         </Button>
-        <Button onClick={heapSort} disabled={isSorting}>
+        <Button onClick={startSort} disabled={isSorting}>
           Start Heap Sort
         </Button>
       </div>

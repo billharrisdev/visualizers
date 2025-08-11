@@ -3,22 +3,12 @@
 import { useState, useEffect, useCallback } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button"
+import { insertionSort, Bar, AnimationStep } from "@/lib/algorithms"
 
 const ARRAY_SIZE = 50;
 const MIN_VALUE = 5;
 const MAX_VALUE = 100;
 const ANIMATION_SPEED_MS = 50;
-
-type Bar = {
-  id: number;
-  value: number;
-};
-
-type AnimationStep = {
-  array: Bar[];
-  comparing: number[];
-  sorted: number[];
-}
 
 export default function InsertionSortVisualizer() {
   const [array, setArray] = useState<Bar[]>([]);
@@ -44,42 +34,8 @@ export default function InsertionSortVisualizer() {
     generateArray();
   }, [generateArray]);
 
-  const insertionSort = () => {
-    const arr = JSON.parse(JSON.stringify(array));
-    const steps: AnimationStep[] = [];
-
-    for (let i = 1; i < arr.length; i++) {
-      let j = i;
-      let key = arr[i];
-
-      steps.push({
-        array: JSON.parse(JSON.stringify(arr)),
-        comparing: [key.id, arr[j-1].id],
-        sorted: arr.slice(0, i).map(bar => bar.id),
-      });
-
-      while (j > 0 && arr[j - 1].value > key.value) {
-        arr[j] = arr[j - 1];
-        j = j - 1;
-
-        // Push the state after the shift
-        const newArr = JSON.parse(JSON.stringify(arr));
-        newArr[j] = key; // Temporarily place key for visualization
-        steps.push({
-          array: newArr,
-          comparing: [key.id, arr[j > 0 ? j-1 : 0].id],
-          sorted: arr.slice(0, i).map(bar => bar.id),
-        });
-      }
-      arr[j] = key;
-    }
-
-    steps.push({
-      array: JSON.parse(JSON.stringify(arr)),
-      comparing: [],
-      sorted: arr.map(bar => bar.id),
-    });
-
+  const startSort = () => {
+    const steps = insertionSort(array);
     setAnimationSteps(steps);
     setIsSorting(true);
   };
@@ -135,7 +91,7 @@ export default function InsertionSortVisualizer() {
         <Button onClick={generateArray} disabled={isSorting}>
           Generate New Array
         </Button>
-        <Button onClick={insertionSort} disabled={isSorting}>
+        <Button onClick={startSort} disabled={isSorting}>
           Start Insertion Sort
         </Button>
       </div>

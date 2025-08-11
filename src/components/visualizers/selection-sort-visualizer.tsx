@@ -3,22 +3,12 @@
 import { useState, useEffect, useCallback } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button"
+import { selectionSort, Bar, AnimationStep } from "@/lib/algorithms"
 
 const ARRAY_SIZE = 50;
 const MIN_VALUE = 5;
 const MAX_VALUE = 100;
 const ANIMATION_SPEED_MS = 50;
-
-type Bar = {
-  id: number;
-  value: number;
-};
-
-type AnimationStep = {
-  array: Bar[];
-  comparing: number[];
-  sorted: number[];
-}
 
 export default function SelectionSortVisualizer() {
   const [array, setArray] = useState<Bar[]>([]);
@@ -44,39 +34,8 @@ export default function SelectionSortVisualizer() {
     generateArray();
   }, [generateArray]);
 
-  const selectionSort = () => {
-    const arr = JSON.parse(JSON.stringify(array));
-    const steps: AnimationStep[] = [];
-    const sorted: number[] = [];
-
-    for (let i = 0; i < arr.length - 1; i++) {
-      let min_idx = i;
-      for (let j = i + 1; j < arr.length; j++) {
-        steps.push({
-          array: JSON.parse(JSON.stringify(arr)),
-          comparing: [arr[min_idx].id, arr[j].id],
-          sorted: [...sorted],
-        });
-        if (arr[j].value < arr[min_idx].value) {
-          min_idx = j;
-        }
-      }
-      [arr[i], arr[min_idx]] = [arr[min_idx], arr[i]];
-      sorted.push(arr[i].id);
-      steps.push({
-        array: JSON.parse(JSON.stringify(arr)),
-        comparing: [],
-        sorted: [...sorted],
-      });
-    }
-    sorted.push(arr[arr.length-1].id)
-
-    steps.push({
-      array: JSON.parse(JSON.stringify(arr)),
-      comparing: [],
-      sorted: [...sorted],
-    });
-
+  const startSort = () => {
+    const steps = selectionSort(array);
     setAnimationSteps(steps);
     setIsSorting(true);
   };
@@ -127,7 +86,7 @@ export default function SelectionSortVisualizer() {
         <Button onClick={generateArray} disabled={isSorting}>
           Generate New Array
         </Button>
-        <Button onClick={selectionSort} disabled={isSorting}>
+        <Button onClick={startSort} disabled={isSorting}>
           Start Selection Sort
         </Button>
       </div>
