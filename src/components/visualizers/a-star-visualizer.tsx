@@ -17,6 +17,7 @@ type Node = {
 
 export default function AStarVisualizer() {
   const [grid, setGrid] = useState<Node[][]>([]);
+  const [loading, setLoading] = useState(true);
   const [isSearching, setIsSearching] = useState(false);
   const [isMousePressed, setIsMousePressed] = useState(false);
   const [startNode, setStartNode] = useState({ row: 5, col: 5 });
@@ -66,6 +67,7 @@ export default function AStarVisualizer() {
     }
     setGrid(newGrid);
     resetState();
+    setLoading(false);
   }, []);
 
   useEffect(() => {
@@ -212,24 +214,31 @@ export default function AStarVisualizer() {
 
   return (
     <div className="flex flex-col items-center">
-      <div
-        className="grid gap-px"
+      {loading ? (
+        <div className="flex justify-center items-center h-96">
+          <p>Loading...</p>
+        </div>
+      ) : (
+        <div
+          data-testid="a-star-grid"
+          className="grid gap-px"
         style={{
           display: 'grid',
           gridTemplateColumns: `repeat(${GRID_SIZE}, 1fr)`,
-          width: 'calc(20px * 50)', // Adjust the size as needed
+          width: 'calc(16px * 50)', // Adjust the size as needed
         }}
         onMouseUp={handleMouseUp}
       >
         {grid.flat().map((node, idx) => (
           <div
             key={idx}
-            className={`w-5 h-5 border border-gray-200 ${getBoxClass(node)}`}
+            className={`w-4 h-4 border border-gray-200 ${getBoxClass(node)}`}
             onMouseDown={() => handleMouseDown(node.row, node.col)}
             onMouseEnter={() => handleMouseEnter(node.row, node.col)}
           ></div>
         ))}
-      </div>
+        </div>
+      )}
       <div className="flex justify-center gap-4 mt-4">
         <Button onClick={aStarSearch} disabled={isSearching}>
           Start A* Search
