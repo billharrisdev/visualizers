@@ -58,7 +58,7 @@ export function insertionSort(array: Bar[]): AnimationStep[] {
     steps.push({
       array: JSON.parse(JSON.stringify(arr)),
       comparing: [key.id, arr[j-1].id],
-      sorted: arr.slice(0, i).map(bar => bar.id),
+      sorted: arr.slice(0, i).map((bar: Bar) => bar.id),
     });
 
     while (j > 0 && arr[j - 1].value > key.value) {
@@ -70,7 +70,7 @@ export function insertionSort(array: Bar[]): AnimationStep[] {
       steps.push({
         array: newArr,
         comparing: [key.id, arr[j > 0 ? j-1 : 0].id],
-        sorted: arr.slice(0, i).map(bar => bar.id),
+        sorted: arr.slice(0, i).map((bar: Bar) => bar.id),
       });
     }
     arr[j] = key;
@@ -79,7 +79,7 @@ export function insertionSort(array: Bar[]): AnimationStep[] {
   steps.push({
     array: JSON.parse(JSON.stringify(arr)),
     comparing: [],
-    sorted: arr.map(bar => bar.id),
+    sorted: arr.map((bar: Bar) => bar.id),
   });
 
   return steps;
@@ -180,7 +180,7 @@ export function mergeSort(array: Bar[]): AnimationStep[] {
   steps.push({
       array: JSON.parse(JSON.stringify(arr)),
       comparing: [],
-      sorted: arr.map(bar => bar.id)
+      sorted: arr.map((bar: Bar) => bar.id)
   });
 
   return steps;
@@ -242,7 +242,7 @@ export function quickSort(array: Bar[]): AnimationStep[] {
     steps.push({
         array: JSON.parse(JSON.stringify(arr)),
         comparing: [],
-        sorted: arr.map(bar => bar.id)
+        sorted: arr.map((bar: Bar) => bar.id)
     });
 
     return steps;
@@ -298,7 +298,7 @@ export function heapSort(array: Bar[]): AnimationStep[] {
     steps.push({
         array: JSON.parse(JSON.stringify(arr)),
         comparing: [],
-        sorted: arr.map(bar => bar.id)
+        sorted: arr.map((bar: Bar) => bar.id)
     });
 
     return steps;
