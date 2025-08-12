@@ -1,28 +1,34 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect, useCallback, useMemo } from "react"
 import { useInView } from "react-intersection-observer"
 import { visualizers as allVisualizers, type Visualizer } from "@/lib/data"
 import VisualizerCard from "./visualizer-card"
 
 type VisualizerListProps = {
   initialVisualizers: Visualizer[];
+  section?: "sort" | "search";
 };
 
-export default function VisualizerList({ initialVisualizers }: VisualizerListProps) {
+export default function VisualizerList({ initialVisualizers, section }: VisualizerListProps) {
+  const source = useMemo(
+    () => (section ? allVisualizers.filter(v => v.section === section) : allVisualizers),
+    [section]
+  )
+
   const [visualizers, setVisualizers] = useState<Visualizer[]>(initialVisualizers)
   const [page, setPage] = useState(2) // Start from page 2, as page 1 is initial
-  const [hasNextPage, setHasNextPage] = useState(true)
+  const [hasNextPage, setHasNextPage] = useState(initialVisualizers.length < source.length)
   const { ref, inView } = useInView()
 
   const loadMoreVisualizers = useCallback(async () => {
     const start = (page - 1) * 8
     const end = start + 8
-    const newVisualizers = allVisualizers.slice(start, end)
+    const newVisualizers = source.slice(start, end)
     setVisualizers((prev) => [...prev, ...newVisualizers])
-    setHasNextPage(end < allVisualizers.length)
+    setHasNextPage(end < source.length)
     setPage((prev) => prev + 1)
-  }, [page])
+  }, [page, source])
 
   useEffect(() => {
     if (inView && hasNextPage) {
