@@ -8,7 +8,7 @@
 
 **A:** Site initially created with Jules (Google). When that approach came up short, switched to Copilot in Agent Mode w/GPT 5 model (Github / MS in VS Code)  
 
-**Q:** What other some other AI Agent coding tools are out there to try?
+**Q:** What are some other AI Agent coding tools are out there to try?
 
 **A:** There are tons with new ones being released every month.  Here are a few: Claude Agent, Windsurf, Cursor, Cline, CrewAI. 
 
