@@ -1,0 +1,20 @@
+<svg width="200" height="120" xmlns="http://www.w3.org/2000/svg">
+  <rect width="200" height="120" fill="#1e293b"/>
+  <g transform="translate(20,20)">
+    <text x="0" y="-5" fill="#60a5fa" font-family="sans-serif" font-size="12">Heap Sort</text>
+    <circle cx="40" cy="20" r="8" fill="#ef4444"/>
+    <circle cx="20" cy="40" r="8" fill="#f97316"/>
+    <circle cx="60" cy="40" r="8" fill="#eab308"/>
+    <circle cx="10" cy="60" r="8" fill="#22c55e"/>
+    <circle cx="30" cy="60" r="8" fill="#3b82f6"/>
+    <circle cx="50" cy="60" r="8" fill="#8b5cf6"/>
+    <circle cx="70" cy="60" r="8" fill="#ec4899"/>
+    <line x1="40" y1="28" x2="20" y2="32" stroke="#60a5fa" stroke-width="1"/>
+    <line x1="40" y1="28" x2="60" y2="32" stroke="#60a5fa" stroke-width="1"/>
+    <line x1="20" y1="48" x2="10" y2="52" stroke="#60a5fa" stroke-width="1"/>
+    <line x1="20" y1="48" x2="30" y2="52" stroke="#60a5fa" stroke-width="1"/>
+    <line x1="60" y1="48" x2="50" y2="52" stroke="#60a5fa" stroke-width="1"/>
+    <line x1="60" y1="48" x2="70" y2="52" stroke="#60a5fa" stroke-width="1"/>
+    <text x="32" y="25" fill="white" font-family="sans-serif" font-size="10">8</text>
+  </g>
+</svg>
