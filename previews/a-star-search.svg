@@ -1,0 +1,25 @@
+<svg width="200" height="120" xmlns="http://www.w3.org/2000/svg">
+  <rect width="200" height="120" fill="#1e293b"/>
+  <g transform="translate(20,20)">
+    <text x="0" y="-5" fill="#60a5fa" font-family="sans-serif" font-size="12">A* Search</text>
+    <g stroke="#64748b" stroke-width="1" fill="none">
+      <line x1="20" y1="20" x2="60" y2="20"/>
+      <line x1="20" y1="20" x2="20" y2="60"/>
+      <line x1="20" y1="40" x2="60" y2="40"/>
+      <line x1="20" y1="60" x2="60" y2="60"/>
+      <line x1="40" y1="20" x2="40" y2="60"/>
+      <line x1="60" y1="20" x2="60" y2="60"/>
+      <line x1="60" y1="20" x2="100" y2="20"/>
+      <line x1="60" y1="40" x2="100" y2="40"/>
+      <line x1="60" y1="60" x2="100" y2="60"/>
+      <line x1="80" y1="20" x2="80" y2="60"/>
+      <line x1="100" y1="20" x2="100" y2="60"/>
+    </g>
+    <circle cx="30" cy="30" r="3" fill="#22c55e"/>
+    <circle cx="90" cy="50" r="3" fill="#ef4444"/>
+    <path d="M30 30 L40 30 L50 30 L60 30 L70 40 L80 50 L90 50" 
+          stroke="#60a5fa" stroke-width="2" fill="none"/>
+    <text x="25" y="15" fill="#22c55e" font-family="sans-serif" font-size="9">start</text>
+    <text x="85" y="45" fill="#ef4444" font-family="sans-serif" font-size="9">goal</text>
+  </g>
+</svg>
