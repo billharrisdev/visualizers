@@ -4,6 +4,7 @@ import { visualizers } from "@/lib/data";
 export default async function Home() {
   const sortInitial = visualizers.filter(v => v.section === "sort").slice(0, 8);
   const searchInitial = visualizers.filter(v => v.section === "search").slice(0, 8);
+  const audioInitial = visualizers.filter(v => v.section === "audio").slice(0, 8);
 
   return (
     <section className="py-8">
@@ -18,6 +19,11 @@ export default async function Home() {
         <div>
           <h2 className="text-2xl font-semibold mb-4">Search</h2>
           <VisualizerList initialVisualizers={searchInitial} section="search" />
+        </div>
+
+        <div>
+          <h2 className="text-2xl font-semibold mb-4">Audio</h2>
+          <VisualizerList initialVisualizers={audioInitial} section="audio" />
         </div>
       </div>
     </section>

@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import ThemeToggle from "@/components/theme/theme-toggle"
 
 export default function Header() {
   return (
@@ -10,9 +11,15 @@ export default function Header() {
           Visual-Algo
         </Link>
         <nav>
-          <Link href="/more-algorithms" className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
-            More Algorithms
-          </Link>
+          <div className="flex items-center gap-4">
+            <Link href="/audio/eq" className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
+              Audio
+            </Link>
+            <Link href="/more-algorithms" className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
+              More Algorithms
+            </Link>
+            <ThemeToggle />
+          </div>
         </nav>
       </div>
     </header>

@@ -7,7 +7,7 @@ import VisualizerCard from "./visualizer-card"
 
 type VisualizerListProps = {
   initialVisualizers: Visualizer[];
-  section?: "sort" | "search";
+  section?: "sort" | "search" | "audio";
 };
 
 export default function VisualizerList({ initialVisualizers, section }: VisualizerListProps) {

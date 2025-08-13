@@ -3,7 +3,7 @@ export type Visualizer = {
   title: string;
   description: string;
   href: string;
-  section: "sort" | "search";
+  section: "sort" | "search" | "audio";
   preview?: string;
 };
 
@@ -97,5 +97,14 @@ export const visualizers: Visualizer[] = [
     href: "/search/dijkstra",
     section: "search",
     preview: "/previews/dijkstra-search.svg",
+  },
+  {
+    id: "11",
+    title: "Audio EQ Visualizer",
+    description:
+      "Real-time frequency bands with peak hold. Uses Web Audio API and CC sample tracks.",
+    href: "/audio/eq",
+    section: "audio",
+  preview: "/previews/audio-eq.svg",
   },
 ];
