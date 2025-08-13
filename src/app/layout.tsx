@@ -21,9 +21,11 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/icon.png", type: "image/png", sizes: "16x16" },
+      { url: "/icon.png", type: "image/png", sizes: "32x32" },
     ],
     apple: [
-      { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/apple-icon.png", type: "image/png" },
     ],
     other: [
       { rel: "mask-icon", url: "/mask-icon.svg", color: "#0ea5e9" },
