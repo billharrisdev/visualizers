@@ -17,12 +17,19 @@ export default function BeatGridVisualizer() {
   const [track, setTrack] = useState(0);
   const [gain, setGain] = useState(0.7);
   const [sensitivity, setSensitivity] = useState(1.5); // threshold multiplier
+  const [timelineSec, setTimelineSec] = useState(8); // history window for markers
 
   const fluxHistoryRef = useRef<number[]>([]);
   const prevSpecRef = useRef<Float32Array | null>(null);
   const onsetsRef = useRef<number[]>([]);
   const [bpm, setBpm] = useState<number | null>(null);
+  const [bpmConfidence, setBpmConfidence] = useState<number | null>(null);
+  const [bpmStdDev, setBpmStdDev] = useState<number | null>(null);
   const flashRef = useRef(0); // frames remaining for strobe
+
+  // Tap tempo
+  const tapTimesRef = useRef<number[]>([]);
+  const [tapBpm, setTapBpm] = useState<number | null>(null);
 
   useEffect(() => setVolume(gain), [gain, setVolume]);
 
@@ -65,7 +72,7 @@ export default function BeatGridVisualizer() {
 
       // peak pick: simple local max and above threshold
       const isPeak = hist.length > 2 && hist[hist.length - 2] > hist[hist.length - 3] && hist[hist.length - 2] > flux && hist[hist.length - 2] > thresh;
-      if (isPeak) {
+  if (isPeak) {
         const t = performance.now() / 1000;
         onsetsRef.current.push(t);
         // keep last ~12s
@@ -95,6 +102,14 @@ export default function BeatGridVisualizer() {
           if (bestD > 0) {
             const candidate = foldBpm(60 / bestD);
             setBpm(Math.round(candidate));
+    // confidence and variance
+    const total = Array.from(counts.values()).reduce((a,b)=>a+b,0) || 1;
+    setBpmConfidence(Math.max(0, Math.min(1, bestC / total)));
+    // std dev of BPM samples (folded)
+    const bpms = iois.map(d => foldBpm(60 / d));
+    const mean = bpms.reduce((a,b)=>a+b,0) / bpms.length;
+    const variance = bpms.reduce((a,b)=>a+(b-mean)*(b-mean),0) / bpms.length;
+    setBpmStdDev(Math.sqrt(variance));
           }
         }
       }
@@ -130,10 +145,37 @@ export default function BeatGridVisualizer() {
       c2d.fillText(`Flux ${(flux).toFixed(3)}  Thresh ${(thresh).toFixed(3)}`, 20, height - 40);
 
       // BPM readout
-      if (bpm) {
-        c2d.fillStyle = "#3b82f6"; // blue-500
-        c2d.font = "bold 24px sans-serif";
-        c2d.fillText(`${bpm} BPM`, width - 140, 36);
+      c2d.fillStyle = "#3b82f6"; // blue-500
+      c2d.font = "bold 24px sans-serif";
+      c2d.textAlign = "right";
+      c2d.fillText(`${bpm ?? "--"} BPM`, width - 16, 36);
+      c2d.textAlign = "left";
+      // Confidence bar
+      if (bpmConfidence != null) {
+        const barX = width - 180, barY = 50, barW = 160, barH = 8;
+        c2d.fillStyle = "#1f2937"; c2d.fillRect(barX, barY, barW, barH);
+        c2d.fillStyle = "#3b82f6"; c2d.fillRect(barX, barY, barW * bpmConfidence, barH);
+        c2d.fillStyle = "#93c5fd"; c2d.font = "12px sans-serif";
+        c2d.fillText(`Confidence ${(bpmConfidence*100).toFixed(0)}%`, barX, barY - 2);
+      }
+      if (bpmStdDev != null) {
+        c2d.fillStyle = "#93c5fd"; c2d.font = "12px sans-serif";
+        c2d.fillText(`StdDev ${bpmStdDev.toFixed(1)} BPM`, width - 180, 84);
+      }
+
+      // Onset markers history timeline (bottom 40px)
+      const now = performance.now() / 1000;
+      const T = timelineSec;
+      const y0 = height - 1;
+      c2d.strokeStyle = "#64748b"; // slate-500
+      c2d.beginPath();
+      c2d.moveTo(20, y0 - 18); c2d.lineTo(width - 20, y0 - 18); c2d.stroke();
+      for (const t of onsetsRef.current) {
+        const dt = now - t;
+        if (dt < 0 || dt > T) continue;
+        const x = 20 + (1 - dt / T) * (width - 40);
+        c2d.strokeStyle = "#f87171"; // red-400
+        c2d.beginPath(); c2d.moveTo(x + 0.5, y0 - 26); c2d.lineTo(x + 0.5, y0 - 10); c2d.stroke();
       }
     };
 
@@ -162,6 +204,30 @@ export default function BeatGridVisualizer() {
           <button className="border rounded-md px-3 py-2 hover:bg-accent" onClick={stop}>Stop</button>
         </div>
         <div className="flex items-center gap-2">
+          <button
+            className="border rounded-md px-3 py-2 hover:bg-accent"
+            onClick={() => {
+              const t = performance.now() / 1000;
+              const taps = tapTimesRef.current;
+              if (taps.length === 0 || t - taps[taps.length - 1] > 2.5) {
+                tapTimesRef.current = [t];
+                setTapBpm(null);
+                return;
+              }
+              taps.push(t);
+              // keep last 8 taps
+              if (taps.length > 8) taps.shift();
+              const iois = taps.slice(1).map((x, i) => x - taps[i]).filter(d => d > 0.2 && d < 2.0);
+              if (iois.length) {
+                const bpms = iois.map(d => foldBpm(60 / d));
+                const mean = bpms.reduce((a,b)=>a+b,0) / bpms.length;
+                setTapBpm(Math.round(mean));
+              }
+            }}
+          >Tap</button>
+          <div className="text-xs text-muted-foreground tabular-nums">Tap: {tapBpm ?? "--"} BPM</div>
+        </div>
+        <div className="flex items-center gap-2">
           <label className="text-sm text-muted-foreground">Volume</label>
           <input type="range" min={0} max={1} step={0.01} value={gain} onChange={(e) => setGain(Number(e.target.value))} className="w-40"/>
           <span className="text-xs text-muted-foreground tabular-nums">{Math.round(gain*100)}%</span>
@@ -170,6 +236,11 @@ export default function BeatGridVisualizer() {
           <label className="text-sm text-muted-foreground">Sensitivity</label>
           <input type="range" min={1.0} max={2.5} step={0.05} value={sensitivity} onChange={(e) => setSensitivity(Number(e.target.value))} className="w-40"/>
           <span className="text-xs text-muted-foreground tabular-nums">{sensitivity.toFixed(2)}×</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <label className="text-sm text-muted-foreground">Timeline</label>
+          <input type="range" min={4} max={12} step={1} value={timelineSec} onChange={(e) => setTimelineSec(Number(e.target.value))} className="w-40"/>
+          <span className="text-xs text-muted-foreground tabular-nums">{timelineSec}s</span>
         </div>
       </div>
 
