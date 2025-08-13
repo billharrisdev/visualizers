@@ -30,6 +30,8 @@ export default function BeatGridVisualizer() {
   // Tap tempo
   const tapTimesRef = useRef<number[]>([]);
   const [tapBpm, setTapBpm] = useState<number | null>(null);
+  const [gridLockToTap, setGridLockToTap] = useState<boolean>(false);
+  const baseBeatTimeRef = useRef<number | null>(null); // reference time for grid phase
 
   useEffect(() => setVolume(gain), [gain, setVolume]);
 
@@ -120,17 +122,31 @@ export default function BeatGridVisualizer() {
       c2d.fillStyle = isFlash ? "rgba(239,68,68,0.25)" : "rgba(0,0,0,0.08)"; // red-500 flash overlay
       c2d.fillRect(0, 0, width, height);
 
-      // grid lines
-      const lines = 16;
+      // dynamic beat grid lines with phase lock
+      const gridBeatsAcross = 8; // show 8 beats across
+      const beatSpacing = width / gridBeatsAcross;
+      const gridBpm = (gridLockToTap && tapBpm) ? tapBpm : (bpm ?? 120);
+      const beatPeriod = 60 / gridBpm;
+      const nowSec = performance.now() / 1000;
+      // choose phase anchor: tap or last onset
+      const anchor = gridLockToTap ? (baseBeatTimeRef.current ?? nowSec) : (onsetsRef.current[onsetsRef.current.length-1] ?? nowSec);
+      const phase = ((nowSec - anchor) / beatPeriod) % 1;
       c2d.strokeStyle = "rgba(100,116,139,0.35)"; // slate-500
       c2d.lineWidth = 1;
-      for (let i = 0; i <= lines; i++) {
-        const x = Math.round((i / lines) * width) + 0.5;
+      // draw main beat lines
+      for (let k = -1; k <= gridBeatsAcross + 1; k++) {
+        const x = Math.round(((k - phase) * beatSpacing)) + 0.5;
+        if (x < 0 || x > width) continue;
         c2d.beginPath(); c2d.moveTo(x, 0); c2d.lineTo(x, height); c2d.stroke();
       }
-      for (let i = 0; i <= lines / 2; i++) {
-        const y = Math.round((i / (lines / 2)) * height) + 0.5;
-        c2d.beginPath(); c2d.moveTo(0, y); c2d.lineTo(width, y); c2d.stroke();
+      // subdivisions (quarters)
+      c2d.strokeStyle = "rgba(100,116,139,0.2)";
+      for (let k = -1; k <= gridBeatsAcross + 1; k++) {
+        for (let q = 1; q < 4; q++) {
+          const x = Math.round(((k - phase + q/4) * beatSpacing)) + 0.5;
+          if (x < 0 || x > width) continue;
+          c2d.beginPath(); c2d.moveTo(x, 0); c2d.lineTo(x, height); c2d.stroke();
+        }
       }
 
       // flux meter
@@ -138,8 +154,13 @@ export default function BeatGridVisualizer() {
       const meterW = Math.min(width - 40, 300), meterH = 12;
       c2d.fillStyle = "#e5e7eb"; // gray-200
       c2d.fillRect(20, height - 32, meterW, meterH);
-      c2d.fillStyle = "#22c55e"; // green-500
-      c2d.fillRect(20, height - 32, meterW * Math.min(fluxNorm / 2, 1), meterH);
+  c2d.fillStyle = "#22c55e"; // green-500
+  c2d.fillRect(20, height - 32, meterW * Math.min(fluxNorm / 2, 1), meterH);
+  // threshold marker at 1.0x (half bar)
+  c2d.strokeStyle = "#ef4444"; // red-500
+  c2d.lineWidth = 2;
+  const threshX = 20 + meterW * 0.5;
+  c2d.beginPath(); c2d.moveTo(threshX + 0.5, height - 36); c2d.lineTo(threshX + 0.5, height - 18); c2d.stroke();
       c2d.fillStyle = "#9ca3af";
       c2d.font = "12px sans-serif";
       c2d.fillText(`Flux ${(flux).toFixed(3)}  Thresh ${(thresh).toFixed(3)}`, 20, height - 40);
@@ -163,7 +184,7 @@ export default function BeatGridVisualizer() {
         c2d.fillText(`StdDev ${bpmStdDev.toFixed(1)} BPM`, width - 180, 84);
       }
 
-      // Onset markers history timeline (bottom 40px)
+      // Onset markers history timeline (bottom 40px) and floating age dots (top)
       const now = performance.now() / 1000;
       const T = timelineSec;
       const y0 = height - 1;
@@ -176,6 +197,15 @@ export default function BeatGridVisualizer() {
         const x = 20 + (1 - dt / T) * (width - 40);
         c2d.strokeStyle = "#f87171"; // red-400
         c2d.beginPath(); c2d.moveTo(x + 0.5, y0 - 26); c2d.lineTo(x + 0.5, y0 - 10); c2d.stroke();
+      }
+      // floating dots at top showing recent onsets, fade by age
+      for (const t of onsetsRef.current) {
+        const dt = now - t; if (dt < 0 || dt > T) continue;
+        const alpha = Math.max(0, 1 - dt / T);
+        const x = 20 + (1 - dt / T) * (width - 40);
+        c2d.fillStyle = `rgba(248,113,113,${alpha.toFixed(3)})`; // red-400 with fade
+        const r = 4 + 4 * (1 - dt / T);
+        c2d.beginPath(); c2d.arc(x, 16, r, 0, Math.PI*2); c2d.fill();
       }
     };
 
@@ -212,6 +242,7 @@ export default function BeatGridVisualizer() {
               if (taps.length === 0 || t - taps[taps.length - 1] > 2.5) {
                 tapTimesRef.current = [t];
                 setTapBpm(null);
+                if (gridLockToTap) baseBeatTimeRef.current = t;
                 return;
               }
               taps.push(t);
@@ -222,10 +253,15 @@ export default function BeatGridVisualizer() {
                 const bpms = iois.map(d => foldBpm(60 / d));
                 const mean = bpms.reduce((a,b)=>a+b,0) / bpms.length;
                 setTapBpm(Math.round(mean));
+                if (gridLockToTap) baseBeatTimeRef.current = t;
               }
             }}
           >Tap</button>
           <div className="text-xs text-muted-foreground tabular-nums">Tap: {tapBpm ?? "--"} BPM</div>
+        </div>
+        <div className="flex items-center gap-2">
+          <label className="text-sm text-muted-foreground">Grid Lock to Tap</label>
+          <input type="checkbox" checked={gridLockToTap} onChange={(e)=>{ setGridLockToTap(e.target.checked); if (e.target.checked) baseBeatTimeRef.current = performance.now()/1000; }} />
         </div>
         <div className="flex items-center gap-2">
           <label className="text-sm text-muted-foreground">Volume</label>

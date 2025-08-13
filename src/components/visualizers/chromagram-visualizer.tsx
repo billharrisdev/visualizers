@@ -47,6 +47,12 @@ export default function ChromagramVisualizer() {
   const keyRef = useRef<string | null>(null);
   const confRef = useRef<{mode: 'maj'|'min', major: number, minor: number}>({ mode: 'maj', major: 0, minor: 0 });
   const hueForPc = (pc: number) => (pc * 30) % 360;
+  const romanForDegree = (deg: number, mode: 'maj'|'min') => {
+    const numeralsMaj = ["I","ii","iii","IV","V","vi","vii°"];
+    const numeralsMin = ["i","ii°","III","iv","v","VI","VII"];
+    return (mode==='maj'?numeralsMaj:numeralsMin)[deg % 7];
+  };
+  const circleOfFifthsIndex = (pc: number) => (pc * 7) % 12; // move by fifths
 
   useEffect(() => {
     if (!analyser || !mapping) return;
@@ -90,12 +96,33 @@ export default function ChromagramVisualizer() {
         g.save(); const mid=(t0+t1)/2, lr=rOuter+18; g.translate(lr*Math.cos(mid), lr*Math.sin(mid)); g.rotate(mid+Math.PI/2);
         g.fillStyle = '#94a3b8'; g.font = '12px sans-serif'; g.textAlign = 'center'; g.fillText(NOTES[pc], 0, 0); g.restore();
       }
-      // chord overlay
+      // chord overlay (roman numerals around)
       if (showChordsRef.current) {
         const triad = bestMode === 'maj' ? [0,4,7] : [0,3,7];
         for (const off of triad) { const pc = (bestShift + off) % 12; const theta = ((pc+0.5)/12)*Math.PI*2; const r=rOuter+6;
           g.fillStyle = '#f59e0b'; g.beginPath(); g.arc(r*Math.cos(theta), r*Math.sin(theta), 4, 0, Math.PI*2); g.fill(); }
+        // roman numerals at scale degrees around the ring
+        const degreesMaj = [0,2,4,5,7,9,11];
+        const degreesMin = [0,2,3,5,7,8,10];
+        const degrees = bestMode==='maj' ? degreesMaj : degreesMin;
+        g.save(); g.translate(cx, cy); g.fillStyle = '#cbd5e1'; g.font = '11px sans-serif'; g.textAlign = 'center';
+        for (let i=0;i<7;i++) {
+          const pc = (bestShift + degrees[i]) % 12; const theta = ((pc)/12)*Math.PI*2; const rr = rOuter + 28;
+          g.save(); g.translate(rr*Math.cos(theta), rr*Math.sin(theta)); g.rotate(theta + Math.PI/2);
+          g.fillText(romanForDegree(i, bestMode), 0, 0);
+          g.restore();
+        }
+        g.restore();
       }
+      // circle-of-fifths highlight path
+      g.save(); g.translate(cx, cy); g.strokeStyle = 'rgba(59,130,246,0.35)'; g.lineWidth = 2;
+      g.beginPath();
+      for (let i=0;i<12;i++) {
+        const pc = (bestShift + circleOfFifthsIndex(i)) % 12; const th = ((pc)/12)*Math.PI*2; const rr = rOuter + 12;
+        const x = rr*Math.cos(th), y = rr*Math.sin(th);
+        if (i===0) g.moveTo(x,y); else g.lineTo(x,y);
+      }
+      g.closePath(); g.stroke(); g.restore();
       g.restore();
 
       // center label + confidence bars
