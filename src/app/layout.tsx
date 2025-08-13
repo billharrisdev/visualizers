@@ -18,6 +18,17 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Visual-Algo",
   description: "Visualize algorithms",
+  icons: {
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+    ],
+    apple: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+    ],
+    other: [
+      { rel: "mask-icon", url: "/mask-icon.svg", color: "#0ea5e9" },
+    ],
+  },
 };
 
 export default function RootLayout({

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="g" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" stop-color="#e6f2ff"/>
+      <stop offset="100%" stop-color="#bfdbfe"/>
+    </linearGradient>
+  </defs>
+  <!-- Background circle -->
+  <circle cx="256" cy="256" r="248" fill="url(#g)"/>
+  <!-- Eye outline -->
+  <path d="M64 256c48-80 144-128 192-128s144 48 192 128c-48 80-144 128-192 128S112 336 64 256z" fill="#ffffff" stroke="#0ea5e9" stroke-width="16"/>
+  <!-- Iris -->
+  <circle cx="256" cy="256" r="64" fill="#60a5fa"/>
+  <!-- Pupil -->
+  <circle cx="256" cy="256" r="28" fill="#0f172a"/>
+  <!-- Specular highlight -->
+  <circle cx="236" cy="236" r="10" fill="#ffffff" opacity="0.85"/>
+</svg>
