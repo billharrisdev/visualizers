@@ -10,7 +10,6 @@ export default function AppleIcon() {
   const bg = "#e6f2ff";
   const iris = "#60a5fa";
   const pupil = "#0f172a";
-  const stroke = "#0ea5e9";
   const eyeW = Math.max(2, w * 0.84);
   const eyeH = Math.max(2, h * 0.56);
   const rIris = Math.max(1, Math.min(w, h) * 0.22 * 2);

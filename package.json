@@ -9,6 +9,7 @@
     "start": "next start",
     "lint": "next lint",
     "test": "jest",
+  "routes:manifest": "node scripts/get-routes-manifest.cjs",
     "prepare": "husky"
   },
   "lint-staged": {

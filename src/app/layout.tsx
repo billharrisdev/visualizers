@@ -20,14 +20,16 @@ export const metadata: Metadata = {
   description: "Visualize algorithms",
   icons: {
     icon: [
-  { url: "/icon.png", type: "image/png", sizes: "16x16" },
-  { url: "/icon.png", type: "image/png", sizes: "32x32" },
+  // Use relative paths so Next.js basePath (in production) is automatically applied.
+  { url: "icon", type: "image/png", sizes: "16x16" },
+  { url: "icon", type: "image/png", sizes: "32x32" },
     ],
+  // No ICO route in static export; rely on PNG icons
     apple: [
-      { url: "/apple-icon.png", type: "image/png" },
+      { url: "apple-icon", type: "image/png" },
     ],
     other: [
-      { rel: "mask-icon", url: "/mask-icon.svg", color: "#0ea5e9" },
+      { rel: "mask-icon", url: "mask-icon.svg", color: "#0ea5e9" },
     ],
   },
 };
