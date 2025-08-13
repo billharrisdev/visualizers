@@ -20,9 +20,8 @@ export const metadata: Metadata = {
   description: "Visualize algorithms",
   icons: {
     icon: [
-      { url: "/icon.svg", type: "image/svg+xml" },
-      { url: "/icon.png", type: "image/png", sizes: "16x16" },
-      { url: "/icon.png", type: "image/png", sizes: "32x32" },
+  { url: "/icon.png", type: "image/png", sizes: "16x16" },
+  { url: "/icon.png", type: "image/png", sizes: "32x32" },
     ],
     apple: [
       { url: "/apple-icon.png", type: "image/png" },
