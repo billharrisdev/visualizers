@@ -107,4 +107,40 @@ export const visualizers: Visualizer[] = [
     section: "audio",
   preview: "/previews/audio-eq.svg",
   },
+  {
+    id: "12",
+    title: "Spectrogram Waterfall",
+    description:
+      "Scrolling time–frequency heatmap using FFT magnitudes.",
+    href: "/audio/spectrogram",
+    section: "audio",
+    preview: "/previews/spectrogram.svg",
+  },
+  {
+    id: "13",
+    title: "3D Particle Field",
+    description:
+      "Particles react to bass/mids/highs using Web Audio + three.js.",
+    href: "/audio/particles",
+    section: "audio",
+    preview: "/previews/particles.svg",
+  },
+  {
+    id: "14",
+    title: "Beat Grid & BPM",
+    description:
+      "Onset detection drives pulses and estimates tempo.",
+    href: "/audio/beat-grid",
+    section: "audio",
+    preview: "/previews/beat-grid.svg",
+  },
+  {
+    id: "15",
+    title: "Chromagram / Key Wheel",
+    description:
+      "12 pitch-class ring with dominant key highlight.",
+    href: "/audio/chromagram",
+    section: "audio",
+    preview: "/previews/chromagram.svg",
+  },
 ];
