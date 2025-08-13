@@ -35,6 +35,7 @@ export default function BeatGridVisualizer() {
 
   useEffect(() => setVolume(gain), [gain, setVolume]);
 
+  // This animation loop intentionally depends on a stable subset; adding more deps would restart it every frame.
   useEffect(() => {
     if (!analyser || !ctx) return;
     const canvas = canvasRef.current!;
@@ -210,7 +211,7 @@ export default function BeatGridVisualizer() {
     };
 
     requestAnimationFrame(draw);
-  }, [analyser, ctx, sensitivity, bpm]);
+  }, [analyser, ctx, sensitivity, bpm, gridLockToTap, tapBpm, timelineSec, bpmConfidence, bpmStdDev]);
 
   return (
     <div className="space-y-4">
