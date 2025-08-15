@@ -1,1 +1,61 @@
-<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg"><rect width="1200" height="630" fill="#0b1220"/><g transform="translate(60,60)"><text x="0" y="0" fill="#d1d5db" font-family="Inter, system-ui" font-size="48">Beat Grid &amp; BPM</text><g transform="translate(0,40)"><text x="0" y="40" fill="#9ca3af" font-family="Inter, system-ui" font-size="24">Onset pulses and tempo estimate</text></g></g></svg>
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+	<defs>
+		<linearGradient id="pulse" x1="0" y1="1" x2="0" y2="0">
+			<stop offset="0%" stop-color="#1e3a8a"/>
+			<stop offset="100%" stop-color="#3b82f6"/>
+		</linearGradient>
+		<linearGradient id="pulse2" x1="0" y1="1" x2="0" y2="0">
+			<stop offset="0%" stop-color="#7c2d12"/>
+			<stop offset="100%" stop-color="#f97316"/>
+		</linearGradient>
+	</defs>
+	<rect width="1200" height="630" fill="#0b1220"/>
+	<g transform="translate(80,60)">
+		<text x="0" y="0" fill="#d1d5db" font-family="Inter, system-ui" font-size="48">Beat Grid &amp; BPM</text>
+		<text x="0" y="70" fill="#9ca3af" font-family="Inter, system-ui" font-size="24">Onset pulses & tempo tracking</text>
+	</g>
+	<!-- Grid -->
+	<g stroke="#1e293b" stroke-width="1" transform="translate(80,160)">
+		<rect x="0" y="0" width="1040" height="300" fill="#111b2b" rx="8"/>
+		<!-- Vertical beat lines every 80 -->
+		<g stroke="#1e293b">
+			<line x1="80" y1="0" x2="80" y2="300"/>
+			<line x1="160" y1="0" x2="160" y2="300"/>
+			<line x1="240" y1="0" x2="240" y2="300"/>
+			<line x1="320" y1="0" x2="320" y2="300"/>
+			<line x1="400" y1="0" x2="400" y2="300"/>
+			<line x1="480" y1="0" x2="480" y2="300"/>
+			<line x1="560" y1="0" x2="560" y2="300"/>
+			<line x1="640" y1="0" x2="640" y2="300"/>
+			<line x1="720" y1="0" x2="720" y2="300"/>
+			<line x1="800" y1="0" x2="800" y2="300"/>
+			<line x1="880" y1="0" x2="880" y2="300"/>
+			<line x1="960" y1="0" x2="960" y2="300"/>
+			<line x1="1040" y1="0" x2="1040" y2="300"/>
+		</g>
+		<!-- Horizontal lanes -->
+		<g stroke="#1e293b">
+			<line x1="0" y1="60" x2="1040" y2="60"/>
+			<line x1="0" y1="120" x2="1040" y2="120"/>
+			<line x1="0" y1="180" x2="1040" y2="180"/>
+			<line x1="0" y1="240" x2="1040" y2="240"/>
+		</g>
+		<!-- Pulses (kicks / snares) -->
+		<g>
+			<rect x="70" y="30" width="20" height="240" fill="url(#pulse)" rx="4"/>
+			<rect x="150" y="70" width="20" height="200" fill="url(#pulse2)" rx="4"/>
+			<rect x="230" y="50" width="20" height="220" fill="url(#pulse)" rx="4"/>
+			<rect x="310" y="90" width="20" height="180" fill="url(#pulse2)" rx="4"/>
+			<rect x="390" y="40" width="20" height="230" fill="url(#pulse)" rx="4"/>
+			<rect x="470" y="60" width="20" height="210" fill="url(#pulse2)" rx="4"/>
+			<rect x="550" y="35" width="20" height="235" fill="url(#pulse)" rx="4"/>
+			<rect x="630" y="85" width="20" height="185" fill="url(#pulse2)" rx="4"/>
+			<rect x="710" y="55" width="20" height="215" fill="url(#pulse)" rx="4"/>
+			<rect x="790" y="75" width="20" height="195" fill="url(#pulse2)" rx="4"/>
+			<rect x="870" y="45" width="20" height="225" fill="url(#pulse)" rx="4"/>
+			<rect x="950" y="65" width="20" height="205" fill="url(#pulse2)" rx="4"/>
+		</g>
+		<!-- BPM label -->
+		<text x="1010" y="280" fill="#fbbf24" font-size="32" font-family="Inter, system-ui" text-anchor="end">128 BPM</text>
+	</g>
+</svg>
