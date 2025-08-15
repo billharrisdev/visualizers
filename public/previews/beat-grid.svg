@@ -1,6 +1,6 @@
 <svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
 	
-	<title id="title">Beat Grid & BPM</title>
+	<title id="title">Beat Grid &amp; BPM</title>
 	<desc id="desc">Stylized grid with alternating onset pulse bars and tempo indicator</desc>
 	<defs>
 		<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
@@ -25,7 +25,7 @@
 	</defs>
 	<rect width="1200" height="630" fill="url(#bg)"/>
 	<g font-family="Inter, system-ui" fill="#e2e8f0" font-size="48" font-weight="600" transform="translate(72 70)">
-		<text>Beat Grid & BPM</text>
+		<text>Beat Grid &amp; BPM</text>
 	</g>
 	<g font-family="Inter, system-ui" fill="#94a3b8" font-size="24" transform="translate(72 112)">
 		<text>Onset pulses · tempo tracking</text>
