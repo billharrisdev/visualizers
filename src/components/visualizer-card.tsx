@@ -10,8 +10,10 @@ type VisualizerCardProps = {
 };
 
 export default function VisualizerCard({ visualizer }: VisualizerCardProps) {
+  // Ensure links work correctly when the site is hosted under a basePath (GitHub Pages deployment)
+  const href = getAssetPath(visualizer.href)
   return (
-    <Link href={visualizer.href}>
+    <Link href={href}>
       <Card className="hover:shadow-lg transition-shadow">
         <CardHeader className="space-y-3">
           <CardTitle>{visualizer.title}</CardTitle>
