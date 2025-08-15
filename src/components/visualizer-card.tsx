@@ -35,13 +35,13 @@ export default function VisualizerCard({ visualizer }: VisualizerCardProps) {
                   onError={handleError}
                 />
               ) : (
-                // Fallback to native img if Next/Image path resolution fails in production
-                <img
-                  src={getAssetPath(visualizer.preview)}
-                  alt={`${visualizer.title} preview`}
-                  className="object-contain w-full h-full"
-                  loading="lazy"
-                />
+                <div
+                  role="img"
+                  aria-label={`${visualizer.title} preview unavailable`}
+                  className="flex items-center justify-center w-full h-full text-[10px] uppercase tracking-wide text-muted-foreground bg-gradient-to-br from-muted/40 to-muted/20"
+                >
+                  Preview unavailable
+                </div>
               )}
             </div>
           )}

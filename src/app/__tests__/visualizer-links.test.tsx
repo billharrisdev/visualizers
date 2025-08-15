@@ -1,20 +1,19 @@
 import { render, screen } from '@testing-library/react'
 import '@testing-library/jest-dom'
+import { type ReactNode } from 'react'
 import { visualizers } from '@/lib/data'
 import VisualizerList from '@/components/visualizer-list'
 
-// Mock next/link to simplify testing hrefs
+// Mock next/link to simplify testing hrefs (typed)
 jest.mock('next/link', () => {
-  return ({ href, children }: any) => <a href={href} data-mock-link>{children}</a>
+  const MockLink = ({ href, children }: { href: string; children: ReactNode }) => (
+    <a href={href} data-mock-link>{children}</a>
+  )
+  MockLink.displayName = 'MockLink'
+  return MockLink
 })
 
-// Mock next/image to render a basic img tag
-jest.mock('next/image', () => (props: any) => {
-  // eslint-disable-next-line @next/next/no-img-element
-  return <img {...props} />
-})
-
-function Wrapper() {
+function Wrapper(): React.ReactElement {
   const sortInitial = visualizers.filter(v => v.section === 'sort').slice(0, 8)
   const searchInitial = visualizers.filter(v => v.section === 'search').slice(0, 8)
   const audioInitial = visualizers.filter(v => v.section === 'audio').slice(0, 8)
@@ -29,7 +28,7 @@ function Wrapper() {
 
 describe('Visualizer links', () => {
   test('all visualizer cards render with correct hrefs', () => {
-    render(<Wrapper />)
+  render(<Wrapper />)
     for (const v of visualizers) {
       const titleEl = screen.getByText(v.title)
       expect(titleEl).toBeInTheDocument()
