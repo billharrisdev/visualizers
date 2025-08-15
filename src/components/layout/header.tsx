@@ -12,12 +12,6 @@ export default function Header() {
         </Link>
         <nav>
           <div className="flex items-center gap-4">
-            <Link href="/audio/eq" className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
-              Audio
-            </Link>
-            <Link href="/more-algorithms" className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
-              More Algorithms
-            </Link>
             <ThemeToggle />
           </div>
         </nav>
