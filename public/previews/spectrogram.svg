@@ -1,1 +1,93 @@
-<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg"><rect width="1200" height="630" fill="#0b1220"/><g transform="translate(60,60)"><text x="0" y="0" fill="#d1d5db" font-family="Inter, system-ui" font-size="48">Spectrogram</text><g transform="translate(0,40)"><text x="0" y="40" fill="#9ca3af" font-family="Inter, system-ui" font-size="24">Scrolling time–frequency heatmap</text></g><g transform="translate(0,120)">
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+	<defs>
+		<linearGradient id="specGrad" x1="0" y1="1" x2="0" y2="0">
+			<stop offset="0%" stop-color="#1e3a8a"/>
+			<stop offset="50%" stop-color="#2563eb"/>
+			<stop offset="85%" stop-color="#f59e0b"/>
+			<stop offset="100%" stop-color="#f87171"/>
+		</linearGradient>
+		<linearGradient id="fadeRight" x1="0" y1="0" x2="1" y2="0">
+			<stop offset="0%" stop-color="#0b1220" stop-opacity="0"/>
+			<stop offset="100%" stop-color="#0b1220"/>
+		</linearGradient>
+	</defs>
+	<rect width="1200" height="630" fill="#0b1220"/>
+	<g transform="translate(80,60)">
+		<text x="0" y="0" fill="#d1d5db" font-family="Inter, system-ui" font-size="48">Spectrogram</text>
+		<text x="0" y="70" fill="#9ca3af" font-family="Inter, system-ui" font-size="24">Time–frequency energy map</text>
+		<g transform="translate(0,120)">
+			<!-- Axis labels -->
+			<text x="-60" y="140" writing-mode="tb" fill="#64748b" font-size="14" font-family="Inter, system-ui">Frequency ↑</text>
+			<text x="360" y="345" fill="#64748b" font-size="14" font-family="Inter, system-ui">Time →</text>
+			<!-- Grid background -->
+			<rect x="0" y="0" width="880" height="300" fill="#111b2b" stroke="#1e293b" stroke-width="1" rx="8"/>
+			<!-- Simulated heat cells -->
+			<g>
+				<!-- Generate columns (hard-coded patterns) -->
+				<!-- Each column: stack of 12 small rects varying in opacity using gradient fill -->
+				<!-- We'll hand craft a few repeating patterns for visual richness -->
+				<g id="colPattern1">
+					<rect width="20" height="25" x="0" y="0" fill="url(#specGrad)" opacity="0.15"/>
+					<rect width="20" height="25" x="0" y="25" fill="url(#specGrad)" opacity="0.20"/>
+					<rect width="20" height="25" x="0" y="50" fill="url(#specGrad)" opacity="0.28"/>
+					<rect width="20" height="25" x="0" y="75" fill="url(#specGrad)" opacity="0.40"/>
+					<rect width="20" height="25" x="0" y="100" fill="url(#specGrad)" opacity="0.55"/>
+					<rect width="20" height="25" x="0" y="125" fill="url(#specGrad)" opacity="0.70"/>
+					<rect width="20" height="25" x="0" y="150" fill="url(#specGrad)" opacity="0.85"/>
+					<rect width="20" height="25" x="0" y="175" fill="url(#specGrad)" opacity="0.65"/>
+					<rect width="20" height="25" x="0" y="200" fill="url(#specGrad)" opacity="0.50"/>
+					<rect width="20" height="25" x="0" y="225" fill="url(#specGrad)" opacity="0.35"/>
+					<rect width="20" height="25" x="0" y="250" fill="url(#specGrad)" opacity="0.22"/>
+					<rect width="20" height="25" x="0" y="275" fill="url(#specGrad)" opacity="0.15"/>
+				</g>
+				<g id="colPattern2">
+					<rect width="20" height="25" x="0" y="0" fill="url(#specGrad)" opacity="0.10"/>
+					<rect width="20" height="25" x="0" y="25" fill="url(#specGrad)" opacity="0.14"/>
+					<rect width="20" height="25" x="0" y="50" fill="url(#specGrad)" opacity="0.25"/>
+					<rect width="20" height="25" x="0" y="75" fill="url(#specGrad)" opacity="0.38"/>
+					<rect width="20" height="25" x="0" y="100" fill="url(#specGrad)" opacity="0.52"/>
+					<rect width="20" height="25" x="0" y="125" fill="url(#specGrad)" opacity="0.80"/>
+					<rect width="20" height="25" x="0" y="150" fill="url(#specGrad)" opacity="0.95"/>
+					<rect width="20" height="25" x="0" y="175" fill="url(#specGrad)" opacity="0.75"/>
+					<rect width="20" height="25" x="0" y="200" fill="url(#specGrad)" opacity="0.55"/>
+					<rect width="20" height="25" x="0" y="225" fill="url(#specGrad)" opacity="0.40"/>
+					<rect width="20" height="25" x="0" y="250" fill="url(#specGrad)" opacity="0.25"/>
+					<rect width="20" height="25" x="0" y="275" fill="url(#specGrad)" opacity="0.18"/>
+				</g>
+				<!-- Place columns -->
+				<g transform="translate(10,10)">
+					<g transform="translate(0,0)"><use href="#colPattern1"/></g>
+					<g transform="translate(30,0)"><use href="#colPattern2"/></g>
+					<g transform="translate(60,0)"><use href="#colPattern1"/></g>
+					<g transform="translate(90,0)"><use href="#colPattern2"/></g>
+					<g transform="translate(120,0)"><use href="#colPattern1"/></g>
+					<g transform="translate(150,0)"><use href="#colPattern2"/></g>
+					<g transform="translate(180,0)"><use href="#colPattern1"/></g>
+					<g transform="translate(210,0)"><use href="#colPattern2"/></g>
+					<g transform="translate(240,0)"><use href="#colPattern1"/></g>
+					<g transform="translate(270,0)"><use href="#colPattern2"/></g>
+					<g transform="translate(300,0)"><use href="#colPattern1"/></g>
+					<g transform="translate(330,0)"><use href="#colPattern2"/></g>
+					<g transform="translate(360,0)"><use href="#colPattern1"/></g>
+					<g transform="translate(390,0)"><use href="#colPattern2"/></g>
+					<g transform="translate(420,0)"><use href="#colPattern1"/></g>
+					<g transform="translate(450,0)"><use href="#colPattern2"/></g>
+					<g transform="translate(480,0)"><use href="#colPattern1"/></g>
+					<g transform="translate(510,0)"><use href="#colPattern2"/></g>
+					<g transform="translate(540,0)"><use href="#colPattern1"/></g>
+					<g transform="translate(570,0)"><use href="#colPattern2"/></g>
+					<g transform="translate(600,0)"><use href="#colPattern1"/></g>
+					<g transform="translate(630,0)"><use href="#colPattern2"/></g>
+					<g transform="translate(660,0)"><use href="#colPattern1"/></g>
+					<g transform="translate(690,0)"><use href="#colPattern2"/></g>
+					<g transform="translate(720,0)"><use href="#colPattern1"/></g>
+					<g transform="translate(750,0)"><use href="#colPattern2"/></g>
+					<g transform="translate(780,0)"><use href="#colPattern1"/></g>
+					<g transform="translate(810,0)"><use href="#colPattern2"/></g>
+				</g>
+				<!-- Fade overlay to imply scrolling -->
+				<rect x="760" y="0" width="120" height="300" fill="url(#fadeRight)"/>
+			</g>
+		</g>
+	</g>
+</svg>
