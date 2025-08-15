@@ -11,8 +11,8 @@ type VisualizerCardProps = {
 };
 
 export default function VisualizerCard({ visualizer }: VisualizerCardProps) {
-  // Ensure links work correctly when the site is hosted under a basePath (GitHub Pages deployment)
-  const href = getAssetPath(visualizer.href)
+  // Internal Next.js route: let Next/link handle basePath automatically to avoid double prefix.
+  const href = visualizer.href
   const [imgErrored, setImgErrored] = useState(false)
   const handleError = useCallback(() => setImgErrored(true), [])
   return (
@@ -24,6 +24,7 @@ export default function VisualizerCard({ visualizer }: VisualizerCardProps) {
             <div className="relative w-full h-36 rounded-md overflow-hidden bg-muted">
               {!imgErrored ? (
                 <Image
+                  // Previews are static assets, still need basePath prefixing.
                   src={getAssetPath(visualizer.preview)}
                   alt={`${visualizer.title} preview`}
                   fill
