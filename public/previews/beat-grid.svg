@@ -1,61 +1,82 @@
-<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+	<title id="title">Beat Grid & BPM</title>
+	<desc id="desc">Stylized grid with alternating onset pulse bars and tempo indicator</desc>
 	<defs>
-		<linearGradient id="pulse" x1="0" y1="1" x2="0" y2="0">
-			<stop offset="0%" stop-color="#1e3a8a"/>
-			<stop offset="100%" stop-color="#3b82f6"/>
+		<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+			<stop offset="0%" stop-color="#0f172a"/>
+			<stop offset="100%" stop-color="#0b1220"/>
 		</linearGradient>
-		<linearGradient id="pulse2" x1="0" y1="1" x2="0" y2="0">
-			<stop offset="0%" stop-color="#7c2d12"/>
-			<stop offset="100%" stop-color="#f97316"/>
+		<linearGradient id="pulseA" x1="0" y1="1" x2="0" y2="0">
+			<stop offset="0%" stop-color="#1d4ed8"/>
+			<stop offset="100%" stop-color="#60a5fa"/>
 		</linearGradient>
+		<linearGradient id="pulseB" x1="0" y1="1" x2="0" y2="0">
+			<stop offset="0%" stop-color="#c2410c"/>
+			<stop offset="100%" stop-color="#fb923c"/>
+		</linearGradient>
+		<filter id="glow" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
+			<feGaussianBlur stdDeviation="4" result="b"/>
+			<feMerge>
+				<feMergeNode in="b"/>
+				<feMergeNode in="SourceGraphic"/>
+			</feMerge>
+		</filter>
 	</defs>
-	<rect width="1200" height="630" fill="#0b1220"/>
-	<g transform="translate(80,60)">
-		<text x="0" y="0" fill="#d1d5db" font-family="Inter, system-ui" font-size="48">Beat Grid &amp; BPM</text>
-		<text x="0" y="70" fill="#9ca3af" font-family="Inter, system-ui" font-size="24">Onset pulses & tempo tracking</text>
+	<rect width="1200" height="630" fill="url(#bg)"/>
+	<g font-family="Inter, system-ui" fill="#e2e8f0" font-size="48" font-weight="600" transform="translate(72 70)">
+		<text>Beat Grid & BPM</text>
 	</g>
-	<!-- Grid -->
-	<g stroke="#1e293b" stroke-width="1" transform="translate(80,160)">
-		<rect x="0" y="0" width="1040" height="300" fill="#111b2b" rx="8"/>
-		<!-- Vertical beat lines every 80 -->
-		<g stroke="#1e293b">
-			<line x1="80" y1="0" x2="80" y2="300"/>
-			<line x1="160" y1="0" x2="160" y2="300"/>
-			<line x1="240" y1="0" x2="240" y2="300"/>
-			<line x1="320" y1="0" x2="320" y2="300"/>
-			<line x1="400" y1="0" x2="400" y2="300"/>
-			<line x1="480" y1="0" x2="480" y2="300"/>
-			<line x1="560" y1="0" x2="560" y2="300"/>
-			<line x1="640" y1="0" x2="640" y2="300"/>
-			<line x1="720" y1="0" x2="720" y2="300"/>
-			<line x1="800" y1="0" x2="800" y2="300"/>
-			<line x1="880" y1="0" x2="880" y2="300"/>
-			<line x1="960" y1="0" x2="960" y2="300"/>
-			<line x1="1040" y1="0" x2="1040" y2="300"/>
+	<g font-family="Inter, system-ui" fill="#94a3b8" font-size="24" transform="translate(72 112)">
+		<text>Onset pulses · tempo tracking</text>
+	</g>
+	<g transform="translate(72 150)">
+		<rect x="0" y="0" width="1056" height="320" rx="12" fill="#0f1b2e" stroke="#1e293b"/>
+		<!-- vertical grid lines -->
+		<g stroke="#1e293b" stroke-width="1">
+			<!-- 14 divisions @ 80px -->
+			<line x1="80" y1="0" x2="80" y2="320"/>
+			<line x1="160" y1="0" x2="160" y2="320"/>
+			<line x1="240" y1="0" x2="240" y2="320"/>
+			<line x1="320" y1="0" x2="320" y2="320"/>
+			<line x1="400" y1="0" x2="400" y2="320"/>
+			<line x1="480" y1="0" x2="480" y2="320"/>
+			<line x1="560" y1="0" x2="560" y2="320"/>
+			<line x1="640" y1="0" x2="640" y2="320"/>
+			<line x1="720" y1="0" x2="720" y2="320"/>
+			<line x1="800" y1="0" x2="800" y2="320"/>
+			<line x1="880" y1="0" x2="880" y2="320"/>
+			<line x1="960" y1="0" x2="960" y2="320"/>
+			<line x1="1040" y1="0" x2="1040" y2="320"/>
 		</g>
-		<!-- Horizontal lanes -->
-		<g stroke="#1e293b">
-			<line x1="0" y1="60" x2="1040" y2="60"/>
-			<line x1="0" y1="120" x2="1040" y2="120"/>
-			<line x1="0" y1="180" x2="1040" y2="180"/>
-			<line x1="0" y1="240" x2="1040" y2="240"/>
+		<!-- horizontal lanes -->
+		<g stroke="#1e293b" stroke-width="1">
+			<line x1="0" y1="64" x2="1056" y2="64"/>
+			<line x1="0" y1="128" x2="1056" y2="128"/>
+			<line x1="0" y1="192" x2="1056" y2="192"/>
+			<line x1="0" y1="256" x2="1056" y2="256"/>
 		</g>
-		<!-- Pulses (kicks / snares) -->
-		<g>
-			<rect x="70" y="30" width="20" height="240" fill="url(#pulse)" rx="4"/>
-			<rect x="150" y="70" width="20" height="200" fill="url(#pulse2)" rx="4"/>
-			<rect x="230" y="50" width="20" height="220" fill="url(#pulse)" rx="4"/>
-			<rect x="310" y="90" width="20" height="180" fill="url(#pulse2)" rx="4"/>
-			<rect x="390" y="40" width="20" height="230" fill="url(#pulse)" rx="4"/>
-			<rect x="470" y="60" width="20" height="210" fill="url(#pulse2)" rx="4"/>
-			<rect x="550" y="35" width="20" height="235" fill="url(#pulse)" rx="4"/>
-			<rect x="630" y="85" width="20" height="185" fill="url(#pulse2)" rx="4"/>
-			<rect x="710" y="55" width="20" height="215" fill="url(#pulse)" rx="4"/>
-			<rect x="790" y="75" width="20" height="195" fill="url(#pulse2)" rx="4"/>
-			<rect x="870" y="45" width="20" height="225" fill="url(#pulse)" rx="4"/>
-			<rect x="950" y="65" width="20" height="205" fill="url(#pulse2)" rx="4"/>
+		<!-- pulses (alternating gradients) -->
+		<g filter="url(#glow)">
+			<!-- x, baseHeight vary to imply dynamics -->
+			<rect x="68"  y="32"  width="24" height="256" rx="5" fill="url(#pulseA)"/>
+			<rect x="148" y="80"  width="24" height="208" rx="5" fill="url(#pulseB)"/>
+			<rect x="228" y="52"  width="24" height="236" rx="5" fill="url(#pulseA)"/>
+			<rect x="308" y="100" width="24" height="188" rx="5" fill="url(#pulseB)"/>
+			<rect x="388" y="44"  width="24" height="244" rx="5" fill="url(#pulseA)"/>
+			<rect x="468" y="70"  width="24" height="218" rx="5" fill="url(#pulseB)"/>
+			<rect x="548" y="38"  width="24" height="250" rx="5" fill="url(#pulseA)"/>
+			<rect x="628" y="94"  width="24" height="194" rx="5" fill="url(#pulseB)"/>
+			<rect x="708" y="56"  width="24" height="232" rx="5" fill="url(#pulseA)"/>
+			<rect x="788" y="86"  width="24" height="202" rx="5" fill="url(#pulseB)"/>
+			<rect x="868" y="48"  width="24" height="240" rx="5" fill="url(#pulseA)"/>
+			<rect x="948" y="74"  width="24" height="214" rx="5" fill="url(#pulseB)"/>
 		</g>
-		<!-- BPM label -->
-		<text x="1010" y="280" fill="#fbbf24" font-size="32" font-family="Inter, system-ui" text-anchor="end">128 BPM</text>
+		<!-- BPM badge -->
+		<g transform="translate(1056 320)">
+			<g transform="translate(-140 -70)">
+				<rect x="0" y="0" width="120" height="48" rx="8" fill="#1e293b" stroke="#334155"/>
+				<text x="60" y="32" text-anchor="middle" font-family="Inter, system-ui" font-size="24" fill="#fbbf24" font-weight="600">128 BPM</text>
+			</g>
+		</g>
 	</g>
 </svg>
