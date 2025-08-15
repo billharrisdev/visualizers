@@ -1,0 +1,21 @@
+# Auto-generated route index
+# Generated: 2025-08-15T15:47:19.528Z
+# Do not edit manually; run: npm run generate:visualizers
+/more-algorithms
+/docs/audio-credits
+/
+/audio/beat-grid
+/audio/chromagram
+/audio/eq
+/audio/particles
+/audio/spectrogram
+/search/a-star
+/search/binary
+/search/dijkstra
+/search/linear
+/sort/bubble
+/sort/heap
+/sort/insertion
+/sort/merge
+/sort/quick
+/sort/selection
