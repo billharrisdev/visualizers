@@ -40,8 +40,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}>
+        <script
+          // This inline script runs before React hydrates to prevent theme FOUC.
+          dangerouslySetInnerHTML={{
+            __html: `(() => {try {const ls = localStorage.getItem('theme');const mql = window.matchMedia('(prefers-color-scheme: dark)');const wantDark = ls ? ls === 'dark' : true; if (wantDark || (!ls && mql.matches)) {document.documentElement.classList.add('dark');} else {document.documentElement.classList.remove('dark');}} catch(_) {document.documentElement.classList.add('dark');}})();`
+          }} />
         <ThemeProvider>
           <Header />
           <main className="flex-grow container mx-auto p-4">{children}</main>
