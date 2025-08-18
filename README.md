@@ -27,6 +27,9 @@ It kept reverting to this approach even after I tried making a rules.MD and set 
 **Pros:** It did a good job of implementing sort and search algorithms apart from the details of the UX. I expect it to do well with functions and hopefully not 
 hallucinate in part due to exceptionally long context.
 
+**Copilot agent w/GPT 5** - Much better results. Agents with IDE integration have an inherent advantage due to operating in same space as the user, terminal access and monitoring, file context, preview, etc.
+
+
 
 
 
